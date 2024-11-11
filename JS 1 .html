@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+    <style>
+    #miobottone1 {
+        display: inline-block;
+        padding: 15px 25px;
+        font-size: 24px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #04AA6D;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #999;
+        }
+
+    #miobottone1:hover {background-color: #3e8e41}
+
+    #miobottone1:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+        }
+    #miobottone2 {
+        display: inline-block;
+        border-radius: 4px;
+        background-color: #f4511e;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 28px;
+        padding: 20px;
+        width: 200px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+        }
+
+    #miobottone2 span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+        }
+
+    #miobottone2 span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+        }
+
+    #miobottone2:hover span {
+        padding-right: 25px;
+        }
+
+    #miobottone2:hover span:after {
+        opacity: 1;
+        right: 0;
+        }
+    #miobottone3 {
+        display: inline-block;
+        padding: 15px 25px;
+        font-size: 24px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #3e5a8e;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #999;
+        }
+
+    #miobottone3:hover {background-color: #7797d3}
+
+    #miobottone3:active {
+        background-color: #3e5a8e;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+        }
+        
+    </style>
+    <title>JS1</title>
+</head>
+<body>
+
+<p>JS1</p>
+<p>Primo esercizio js1 bottone e alert</p>
+<button id="miobottone1" onclick="aprifinestra1()">Nome</button>
+<button id="miobottone2" onclick="aprifinestra2()">Cognome</button>
+<button id="miobottone3" onclick="aprifinestra3()">Età</button>
+<script>
+    function aprifinestra1(){
+
+        alert("Andrea ");
+    }
+    function aprifinestra2(){
+
+        alert("De Vivo ");
+    }
+    function aprifinestra3(){
+
+        alert("16 anni ");
+    }
+</script>
+
+</body>
+</html>
