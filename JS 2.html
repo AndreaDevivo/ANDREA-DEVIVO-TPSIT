@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <style>
+    #bottone {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 22px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #067342;
+        background-color: #add806;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px #a020f0;
+        }
+
+    #bottone:hover {background-color: #6c9bf1}
+
+    #bottone:active {
+        background-color: #30518e;
+        box-shadow: 0 5px #383434;
+        transform: translateY(4px);
+        }
+       
+    </style>
+    <title>JS2  </title>
+</head>
+<body>
+
+<p>JS2</p>
+<p> Javascript2: input, bottone e alert</p>
+<input type="text" name="" id="input">
+<button id="bottone" onclick="aprifinestra()">Click me!</button>
+
+
+<script>
+    function aprifinestra(){
+let i=document.getElementById("input").value
+        alert(i);
+       
+    }
+</script>
+
+</body>
+</html>
