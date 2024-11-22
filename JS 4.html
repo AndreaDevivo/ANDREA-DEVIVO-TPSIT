@@ -5,7 +5,7 @@
     <style>
         Body {
             font-family: sans-serif;
-            background-color: #add806;
+            background-color: #a1abe39c;
         }
 
         Div {
@@ -23,7 +23,7 @@
             text-decoration: none;
             outline: none;
             color: #fff;
-            background-color: #0efdc8;
+            background-color: #2d6ada;
             border: none;
             border-radius: 15px;
             box-shadow: 0 9px #696666;
@@ -34,7 +34,7 @@
         }
 
         #bottone:active {
-            background-color: #0efdc8;
+            background-color: #2b529b;
             box-shadow: 0 5px #767676;
             transform: translateY(4px);
         }
@@ -76,13 +76,13 @@
 <body>
     <div>
         <p></p>
-        <label for="partenza" style="font-weight: bold">Punto di inizio: </label>
+        <label for="partenza" style="font-weight: bold">Punto di Partenza : </label>
         <input type="text" name="" id="Partenza">
 
         <label for="pausa" style="font-weight: bold">Punto di Pausa : </label>
         <input type="text" name="" id="Pausa">
 
-        <label for="arrivo" style="font-weight: bold">Punto di fine : </label>
+        <label for="arrivo" style="font-weight: bold">Punto d'arrivo : </label>
         <input type="text" name="" id="arrivo">
     </div>
 
@@ -92,16 +92,16 @@
         <p id="output" style="font-weight: bold"> Risultato: </p>
 
         <div id="img">
-            <img src= "C:\Users\andrea.devivo\Downloads\alba-monviso-1080x717.jpg"
+            <img src="https://static2-viaggi.corriereobjects.it/wp-content/uploads/2019/09/alba-monviso-1080x717.jpg?v=1572341703"
                 alt="">
         </div>
 
         <script>
             const elementOut = document.getElementById("output");
             function calcolo() {
-                let v1 = document.getElementById("inizio").value;
+                let v1 = document.getElementById("Partenza").value;
                 let v2 = document.getElementById("Pausa").value;
-                let v3 = document.getElementById("fine").value;
+                let v3 = document.getElementById("arrivo").value;
 
                 let dislivello = v2 - v1;
                 let dislivello2 = v3 - v2;
@@ -116,3 +116,4 @@
 </body>
 
 </html>
+
