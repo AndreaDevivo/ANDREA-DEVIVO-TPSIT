@@ -6,16 +6,16 @@
     <title>Gioco Morra Cinese</title>
     <link rel="stylesheet" href="styleMorraCinese.css">
     <style>
-        /* CSS per l'aspetto delle immagini */
+      
         #choices img {
-            width: 100px; /* Imposta la larghezza delle immagini */
-            margin: 10px; /* Spaziatura tra le immagini */
-            cursor: pointer; /* Cambia il cursore per far capire che sono cliccabili */
-            transition: transform 0.2s; /* Aggiunge un effetto di transizione */
+            width: 100px;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.2s; 
         }
 
         #choices img:hover {
-            transform: scale(1.1); /* Ingrandisce l'immagine al passaggio del mouse */
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -24,7 +24,7 @@
         <h1>Morra 3a-BoT!</h1>
         <p>Scegli la tua mossa:</p>
        
-        <!-- Immagini per scegliere la mossa -->
+        
         <div id="choices">
             <img src="https://png.pngtree.com/png-clipart/20210913/ourlarge/pngtree-real-stone-rock-pebble-png-image_3926136.jpg" alt="Sasso" class="choice" onclick="playGame('sasso')" />
             <img src="https://png.pngtree.com/png-clipart/20190918/ourmid/pngtree-creative-tearing-paper-background-vector-3197265-png-image_1737513.jpg" alt="Carta" class="choice" onclick="playGame('carta')" />
@@ -32,42 +32,42 @@
         </div>
 
         <h2>Risultato:</h2>
-        <p id="out1"></p> <!-- La mossa dell'utente -->
-        <p id="out2"></p> <!-- La mossa del bot -->
-        <p id="out3"></p> <!-- Il risultato finale -->
+        <p id="out1"></p> 
+        <p id="out2"></p>
+        <p id="out3"></p> 
     </div>
 
     <script>
-        // Funzione principale che gestisce la partita
+       
         function playGame(userMove) {
-            // Mostra la mossa dell'utente
+           
             document.getElementById("out1").textContent = "La tua scelta: " + userMove;
 
-            // Ottieni la mossa del bot
+           
             let botMove = getBotChoice();
 
-            // Mostra la mossa del bot
+           
             document.getElementById("out2").textContent = "La mossa del bot: " + botMove;
 
-            // Determina il vincitore
+            
             let result = getResult(userMove, botMove);
             document.getElementById("out3").textContent = result;
         }
 
-        // Funzione che genera una scelta casuale per il bot
+        
         function getBotChoice() {
             const moves = ["sasso", "carta", "forbice"];
-            const randomIndex = Math.floor(Math.random() * moves.length); // Genera un indice casuale tra 0 e 2
+            const randomIndex = Math.floor(Math.random() * moves.length);
             return moves[randomIndex];
         }
 
-        // Funzione che determina il vincitore tra l'utente e il bot
+      
         function getResult(userMove, botMove) {
             if (userMove === botMove) {
                 return "È un pareggio!";
             }
 
-            // Condizioni per determinare chi vince
+          
             if (
                 (userMove === "sasso" && botMove === "forbice") ||
                 (userMove === "carta" && botMove === "sasso") ||
