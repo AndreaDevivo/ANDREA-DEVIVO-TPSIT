@@ -1,60 +1,68 @@
-import random
-import time
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizzatore con Numero Casuale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
 
-def is_prime(num):
-    """Funzione che verifica se un numero è primo."""
-    if num < 2:
-        return False
-    for i in range(2, int(num ** 0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
+    <h1>Temporizzatore con Numero Casuale</h1>
+    <p id="output">Il risultato verrà mostrato qui...</p>
 
-def generare_numero():
-    try:
-        while True:
-            numero_casuale = random.randint(1, 1000)
-            print(f"\nNumero casuale: {numero_casuale}")
-            
-            # Verifica se il numero è pari o dispari
-            if numero_casuale % 2 == 0:
-                print("Il numero è pari.")
-            else:
-                print("Il numero è dispari.")
-            
-            # Verifica se il numero è primo
-            if is_prime(numero_casuale):
-                print("Il numero è primo.")
-            else:
-                print("Il numero non è primo.")
-            
-            # Calcola e stampa il doppio del numero
-            doppio = numero_casuale * 2
-            print(f"Il doppio del numero è: {doppio}")
-            
-            # Calcola e stampa la metà intera del numero
-            meta = numero_casuale // 2
-            print(f"La metà intera del numero è: {meta}")
-            
-            # Calcola e stampa il complemento (1000 - n)
-            complemento = 1000 - numero_casuale
-            print(f"Il complemento del numero è: {complemento}")
-            
-            # Calcola e stampa la somma con il numero precedente e successivo
-            precedente = numero_casuale - 1
-            successivo = numero_casuale + 1
-            somma = numero_casuale + precedente + successivo
-            print(f"La somma del numero con il precedente e il successivo è: {somma}")
-            
-            # Moltiplica il numero per 3.14 e stampa il risultato
-            moltiplicazione = numero_casuale * 3.14
-            print(f"Il numero moltiplicato per 3.14 è: {moltiplicazione}")
-            
-            # Attende 5 secondi prima di generare un altro numero
-            time.sleep(5)
+    <script>
+
+        function isPrime(num) {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function generateAndCalculate() {
+            let num = Math.floor(Math.random() * 1000) + 1; // Numero casuale tra 1 e 1000
+            let output = `Numero generato: ${num}<br>`;
+
+
+            output += num % 2 === 0 ? 'Il numero è pari.<br>' : 'Il numero è dispari.<br>';
+
+  
+            output += isPrime(num) ? 'Il numero è primo.<br>' : 'Il numero non è primo.<br>';
+
     
-    except KeyboardInterrupt:
-        print("\nProgramma interrotto dall'utente.")
-        
-# Avvia la funzione
-generare_numero()
+            output += `Il doppio del numero è: ${num * 2}<br>`;
+            output += `La metà intera del numero è: ${Math.floor(num / 2)}<br>`;
+
+
+            output += `Il complemento del numero rispetto a 1000 è: ${1000 - num}<br>`;
+
+  
+            output += `La somma del numero con il suo precedente e successivo è: ${num - 1 + num + num + 1}<br>`;
+
+
+            output += `Il numero moltiplicato per 3.14 è: ${(num * 3.14).toFixed(2)}<br>`;
+
+
+            document.getElementById('output').innerHTML = output;
+        }
+
+      
+        setInterval(generateAndCalculate, 5000);
+
+   
+        generateAndCalculate();
+    </script>
+
+</body>
+</html>
