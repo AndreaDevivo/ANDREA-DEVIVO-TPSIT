@@ -1,1 +1,60 @@
+import random
+import time
 
+def is_prime(num):
+    """Funzione che verifica se un numero è primo."""
+    if num < 2:
+        return False
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+def generare_numero():
+    try:
+        while True:
+            numero_casuale = random.randint(1, 1000)
+            print(f"\nNumero casuale: {numero_casuale}")
+            
+            # Verifica se il numero è pari o dispari
+            if numero_casuale % 2 == 0:
+                print("Il numero è pari.")
+            else:
+                print("Il numero è dispari.")
+            
+            # Verifica se il numero è primo
+            if is_prime(numero_casuale):
+                print("Il numero è primo.")
+            else:
+                print("Il numero non è primo.")
+            
+            # Calcola e stampa il doppio del numero
+            doppio = numero_casuale * 2
+            print(f"Il doppio del numero è: {doppio}")
+            
+            # Calcola e stampa la metà intera del numero
+            meta = numero_casuale // 2
+            print(f"La metà intera del numero è: {meta}")
+            
+            # Calcola e stampa il complemento (1000 - n)
+            complemento = 1000 - numero_casuale
+            print(f"Il complemento del numero è: {complemento}")
+            
+            # Calcola e stampa la somma con il numero precedente e successivo
+            precedente = numero_casuale - 1
+            successivo = numero_casuale + 1
+            somma = numero_casuale + precedente + successivo
+            print(f"La somma del numero con il precedente e il successivo è: {somma}")
+            
+            # Moltiplica il numero per 3.14 e stampa il risultato
+            moltiplicazione = numero_casuale * 3.14
+            print(f"Il numero moltiplicato per 3.14 è: {moltiplicazione}")
+            
+            # Attende 5 secondi prima di generare un altro numero
+            time.sleep(5)
+    
+    except KeyboardInterrupt:
+        print("\nProgramma interrotto dall'utente.")
+        
+# Avvia la funzione
+generare_numero()
