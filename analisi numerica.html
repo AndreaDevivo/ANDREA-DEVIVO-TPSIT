@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proprietà dei Numeri</title>
+    <style>
+        .prime {
+            color: red;
+        }
+        .number-row {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Proprietà dei Numeri da 1 a 10000</h1>
+
+<div id="output"></div>
+
+<script>
+    // Funzione per verificare se un numero è primo
+    function isPrime(n) {
+        if (n < 2) return false;
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i === 0) return false;
+        }
+        return true;
+    }
+
+    // Funzione per generare le proprietà e visualizzarle
+    function generateProperties() {
+        let outputDiv = document.getElementById("output");
+
+        // Itera su tutti i numeri da 1 a 10000
+        for (let n = 1; n <= 10000; n++) {
+            // Verifica se il numero è pari o dispari
+            let parity = (n % 2 === 0) ? "pari" : "dispari";
+            
+            // Calcola il doppio e la metà intera
+            let double = n * 2;
+            let half = Math.floor(n / 2);
+            
+            // Calcola il complemento (1000 - n)
+            let complement = 1000 - n;
+            
+            // Calcola la somma del numero, del suo precedente e del suo successivo
+            let sumNeighbors = (n - 1) + n + (n + 1);
+            
+            // Moltiplicazione per 3.14 e 2.71
+            let mul_3_14 = (n * 3.14).toFixed(2);
+            let mul_2_71 = (n * 2.71).toFixed(2);
+            
+            // Compone la riga di output
+            let output = `${n}: ${parity}, Doppio: ${double}, Metà: ${half}, Complemento: ${complement}, Somma: ${sumNeighbors}, x3.14: ${mul_3_14}, x2.71: ${mul_2_71}`;
+            
+            // Crea un div per ogni riga e aggiungi la classe 'prime' se il numero è primo
+            let rowDiv = document.createElement("div");
+            rowDiv.classList.add("number-row");
+            if (isPrime(n)) {
+                rowDiv.classList.add("prime");
+            }
+            rowDiv.textContent = output;
+
+            // Aggiungi il div al contenitore
+            outputDiv.appendChild(rowDiv);
+        }
+    }
+
+    // Chiamata alla funzione per generare le proprietà quando la pagina viene caricata
+    window.onload = generateProperties;
+</script>
+
+</body>
+</html>
