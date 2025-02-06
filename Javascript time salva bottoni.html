@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottoni con Tempo</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+        }
+        button {
+            margin: 10px;
+            padding: 20px 40px;
+            font-size: 24px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:nth-child(1) { background-color: red; }
+        button:nth-child(2) { background-color: green; }
+        button:nth-child(3) { background-color: blue; }
+        button:nth-child(4) { background-color: yellow; }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="logTime(0)">Bottone 1</button>
+    <button onclick="logTime(1)">Bottone 2</button>
+    <button onclick="logTime(2)">Bottone 3</button>
+    <button onclick="logTime(3)">Bottone 4</button>
+    
+    <div id="output"></div>
+
+    <script>
+        let firstClickTime = null;
+        let timeDifferences = [];
+
+        function logTime(buttonIndex) {
+            let now = new Date();
+            let timestamp = now.toLocaleString() + "." + now.getMilliseconds();
+            document.getElementById("output").innerHTML += `<p style="font-size: 24px;">Bottone ${buttonIndex + 1} premuto: ${timestamp}</p>`;
+            
+            let currentTime = performance.now();
+            if (firstClickTime === null) {
+                firstClickTime = currentTime;
+            } else {
+                let timeDiff = currentTime - firstClickTime;
+                timeDifferences.push(timeDiff);
+                document.getElementById("output").innerHTML += `<p style="font-size: 24px;">Intervallo dal primo click: ${timeDiff.toFixed(3)} ms</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
