@@ -1,49 +1,69 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Griglia 2x2</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 100px);
-            grid-template-rows: repeat(2, 100px);
-            gap: 10px;
-        }
-        .cell {
-            width: 100px;
-            height: 100px;
-            background-color: #fff;
-        }
-        .cell:nth-child(1) {
-            background-color: red;
-        }
-        .cell:nth-child(2) {
-            background-color: blue;
-        }
-        .cell:nth-child(3) {
-            background-color: green;
-        }
-        .cell:nth-child(4) {
-            background-color: yellow;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .game-container {
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 100px);
+      grid-template-rows: repeat(2, 100px);
+      gap: 10px;
+      margin: 20px auto;
+    }
+    .tile {
+      width: 100px;
+      height: 100px;
+      background-color: #cccccc;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .tile.flipped {
+      background-color: transparent;
+    }
+    #status {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="grid">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-    </div>
-</body>
-</html>
+
+<div class="game-container">
+  <h1>Memory Game</h1>
+  <div class="grid" id="grid">
+    <!-- Tiles will be created here by JavaScript -->
+  </div>
+  <p id="status">Memorizza la sequenza!</p>
+</div>
+
+<script>
+  const colors = ['#ff6347', '#3b9a9c', '#ffd700', '#8a2be2'];
+  let sequence = [];
+  let userSequence = [];
+  let tileElements = [];
+  let step = 0;
+
+  // Funzione per mescolare l'array
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  // Funzione per creare la g
