@@ -66,4 +66,80 @@
     }
   }
 
-  // Funzione per creare la g
+  // Funzione per creare la griglia
+  function createGrid() {
+    const gridElement = document.getElementById('grid');
+    gridElement.innerHTML = '';  // Pulisce la griglia
+    colors.forEach((color, index) => {
+      const tile = document.createElement('div');
+      tile.classList.add('tile');
+      tile.style.backgroundColor = color;
+      tile.addEventListener('click', () => handleTileClick(index));
+      gridElement.appendChild(tile);
+      tileElements.push(tile);
+    });
+  }
+
+  // Mostra la sequenza al giocatore
+  function showSequence() {
+    let index = 0;
+    const status = document.getElementById('status');
+    status.textContent = Sequenza: ${sequence.map(index => colors[index]).join(', ')};
+
+    const interval = setInterval(() => {
+      const tile = tileElements[sequence[index]];
+      tile.classList.add('flipped');
+      setTimeout(() => tile.classList.remove('flipped'), 500);
+      index++;
+
+      if (index === sequence.length) {
+        clearInterval(interval);
+        setTimeout(() => status.textContent = 'Ora tocca a te!', 500);
+      }
+    }, 1000);
+  }
+
+  // Gestisce il click sul tile da parte del giocatore
+  function handleTileClick(index) {
+    userSequence.push(index);
+
+    if (userSequence.length === sequence.length) {
+      checkSequence();
+    }
+  }
+
+  // Verifica se la sequenza dell'utente è corretta
+  function checkSequence() {
+    if (userSequence.join(',') === sequence.join(',')) {
+      document.getElementById('status').textContent = 'Bravo! Hai indovinato!';
+      setTimeout(nextRound, 1500);
+    } else {
+      document.getElementById('status').textContent = 'Ops, prova ancora!';
+      setTimeout(resetGame, 1500);
+    }
+  }
+
+  // Passa al turno successivo
+  function nextRound() {
+    sequence.push(Math.floor(Math.random() * colors.length));
+    userSequence = [];
+    step++;
+    showSequence();
+  }
+
+  // Reset del gioco
+  function resetGame() {
+    sequence = [];
+    userSequence = [];
+    step = 0;
+    document.getElementById('status').textContent = 'Memorizza la sequenza!';
+    nextRound();
+  }
+
+  // Avvia il gioco
+  createGrid();
+  resetGame();
+</script>
+
+</body>
+</html>
