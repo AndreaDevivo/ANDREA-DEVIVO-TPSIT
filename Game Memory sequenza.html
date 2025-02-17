@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Sequenziale</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .button {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .highlight {
+            background-color: #f39c12;
+        }
+        .active {
+            background-color: #27ae60;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            justify-items: center;
+            margin-top: 30px;
+        }
+        .game-area {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container game-area">
+    <h1>Memory Sequenziale</h1>
+    <button id="start-btn" class="btn btn-primary mb-3">Start</button>
+    <div id="message"></div>
+    <div id="score" class="mb-3">Punteggio: 0</div>
+    <div id="grid" class="grid"></div>
+</div>
+
+<!-- Bootstrap 5 e JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Inizializzazione variabili
+    let sequence = [];
+    let userSequence = [];
+    let score = 0;
+    let isGameActive = false;
+
+    // Funzione per iniziare il gioco
+    document.getElementById('start-btn').addEventListener('click', startGame);
+
+    // Funzione per iniziare una nuova partita
+    function startGame() {
+        sequence = [];
+        userSequence = [];
+        score = 0;
+        document.getElementById('score').innerText = `Punteggio: ${score}`;
+        document.getElementById('message').innerText = "Guarda la sequenza!";
+        isGameActive = true;
+        generateSequence();
+        showSequence();
+    }
+
+    // Funzione per generare la sequenza casuale
+    function generateSequence() {
+        for (let i = 0; i < score + 3; i++) {
+            let randomButton = Math.floor(Math.random() * 16); // Genera un numero casuale tra 0 e 15
+            sequence.push(randomButton);
+        }
+    }
+
+    // Funzione per mostrare la sequenza di pulsanti
+    function showSequence() {
+        let i = 0;
+        const interval = setInterval(() => {
+            const button = document.getElementById(`button-${sequence[i]}`);
+            button.classList.add('highlight');
+            setTimeout(() => {
+                button.classList.remove('highlight');
+            }, 500);
+            i++;
+            if (i === sequence.length) {
+                clearInterval(interval);
+                userTurn();
+            }
+        }, 1000);
+    }
+
+    // Funzione per gestire il turno dell'utente
+    function userTurn() {
+        userSequence = [];
+        document.getElementById('message').innerText = "Riproduci la sequenza!";
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', handleUserClick);
+        });
+    }
+
+    // Funzione per gestire il click dell'utente
+    function handleUserClick(e) {
+        if (!isGameActive) return;
+
+        const clickedButtonId = parseInt(e.target.id.replace('button-', ''));
+        userSequence.push(clickedButtonId);
+        e.target.classList.add('active');
+
+        setTimeout(() => {
+            e.target.classList.remove('active');
+        }, 300);
+
+        checkSequence(clickedButtonId);
+    }
+
+    // Funzione per controllare se la sequenza è corretta
+    function checkSequence(clickedButtonId) {
+        const currentIndex = userSequence.length - 1;
+        if (userSequence[currentIndex] !== sequence[currentIndex]) {
+            gameOver();
+        } else if (userSequence.length === sequence.length) {
+            score++;
+            document.getElementById('score').innerText = `Punteggio: ${score}`;
+            document.getElementById('message').innerText = "Corretto! Nuova sequenza!";
+            setTimeout(() => {
+                generateSequence();
+                showSequence();
+            }, 1000);
+        }
+    }
+
+    // Funzione per gestire la fine del gioco
+    function gameOver() {
+        document.getElementById('message').innerText = `Gioco finito! Punteggio finale: ${score}`;
+        isGameActive = false;
+        document.querySelectorAll('.button').forEach(button => {
+            button.removeEventListener('click', handleUserClick);
+        });
+    }
+
+    // Funzione per creare la griglia dei pulsanti
+    function createButtonGrid() {
+        const grid = document.getElementById('grid');
+        for (let i = 0; i < 16; i++) {
+            const button = document.createElement('button');
+            button.id = `button-${i}`;
+            button.classList.add('button', 'btn', 'btn-light');
+            button.addEventListener('click', handleUserClick);
+            grid.appendChild(button);
+        }
+    }
+
+    // Creazione della griglia all'avvio
+    createButtonGrid();
+</script>
+
+</body>
+</html>
