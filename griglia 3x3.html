@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memory Game 3x3</title>
+  <title>Griglia 3x3</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -14,132 +13,56 @@
       margin: 0;
       background-color: #f0f0f0;
     }
-    .game-container {
-      text-align: center;
-    }
-    .grid {
+    .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 100px);
       grid-template-rows: repeat(3, 100px);
       gap: 10px;
-      margin: 20px auto;
     }
-    .tile {
+    .grid-item {
       width: 100px;
       height: 100px;
-      background-color: #cccccc;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .tile.flipped {
-      background-color: transparent;
+    .red {
+      background-color: red;
     }
-    #status {
-      font-size: 1.5em;
-      margin-top: 20px;
+    .green {
+      background-color: green;
+    }
+    .blue {
+      background-color: blue;
+    }
+    .yellow {
+      background-color: yellow;
+    }
+    .cyan {
+      background-color: cyan;
+    }
+    .magenta {
+      background-color: magenta;
+    }
+    .orange {
+      background-color: orange;
+    }
+    .purple {
+      background-color: purple;
+    }
+    .lime {
+      background-color: lime;
     }
   </style>
 </head>
 <body>
-
-<div class="game-container">
-  <h1>Memory Game 3x3</h1>
-  <div class="grid" id="grid">
-    <!-- I tiles verranno creati dinamicamente con JavaScript -->
+  <div class="grid-container">
+    <div class="grid-item red"></div>
+    <div class="grid-item green"></div>
+    <div class="grid-item blue"></div>
+    <div class="grid-item yellow"></div>
+    <div class="grid-item cyan"></div>
+    <div class="grid-item magenta"></div>
+    <div class="grid-item orange"></div>
+    <div class="grid-item purple"></div>
+    <div class="grid-item lime"></div>
   </div>
-  <p id="status">Memorizza la sequenza!</p>
-</div>
-
-<script>
-  // 9 colori diversi per la griglia 3x3
-  const colors = [
-    '#ff6347', '#3b9a9c', '#ffd700', '#8a2be2', '#ff4500', 
-    '#7fff00', '#adff2f', '#800080', '#ff1493'
-  ]; 
-  let sequence = [];  // Sequenza dei colori da memorizzare
-  let userSequence = [];  // Sequenza dell'utente
-  let tileElements = [];  // Elementi dei tiles della griglia
-  let step = 0;  // Numero del turno
-
-  // Crea la griglia 3x3
-  function createGrid() {
-    const gridElement = document.getElementById('grid');
-    gridElement.innerHTML = ''; // Pulisce la griglia esistente
-    colors.forEach((color, index) => {
-      const tile = document.createElement('div');
-      tile.classList.add('tile');
-      tile.style.backgroundColor = color; // Imposta il colore di ciascun quadrato
-      tile.dataset.index = index; // Aggiungi un attributo per identificare il quadrato
-      tile.addEventListener('click', () => handleTileClick(index)); // Aggiungi evento click
-      gridElement.appendChild(tile);  // Aggiungi il tile alla griglia
-      tileElements.push(tile);  // Aggiungi il tile all'array per riferimento
-    });
-  }
-
-  // Mostra la sequenza dei colori
-  function showSequence() {
-    let index = 0;
-    const status = document.getElementById('status');
-    status.textContent = Memorizza la sequenza!;
-
-    // Mostra i colori uno alla volta
-    const interval = setInterval(() => {
-      const tile = tileElements[sequence[index]];  // Seleziona il tile corrispondente
-      tile.classList.add('flipped');  // Mostra il colore del tile
-      setTimeout(() => tile.classList.remove('flipped'), 500);  // Nascondi il colore dopo mezzo secondo
-      index++;
-
-      if (index === sequence.length) {
-        clearInterval(interval);  // Ferma l'intervallo quando la sequenza è finita
-        setTimeout(() => status.textContent = 'Ora tocca a te!', 500);  // Cambio del messaggio
-      }
-    }, 1000);  // Mostra ogni tile con intervallo di 1 secondo
-  }
-
-  // Gestisce il click sui tiles da parte dell'utente
-  function handleTileClick(index) {
-    userSequence.push(index);  // Aggiungi il tile cliccato alla sequenza dell'utente
-
-    // Se la sequenza dell'utente è lunga quanto quella da memorizzare
-    if (userSequence.length === sequence.length) {
-      checkSequence();  // Verifica se la sequenza dell'utente è corretta
-    }
-  }
-
-  // Verifica se la sequenza dell'utente è corretta
-  function checkSequence() {
-    const status = document.getElementById('status');
-    if (userSequence.join(',') === sequence.join(',')) {
-      status.textContent = 'Bravo! Hai indovinato!';
-      setTimeout(nextRound, 1500);  // Passa al turno successivo
-    } else {
-      status.textContent = 'Ops, prova ancora!';
-      setTimeout(resetGame, 1500);  // Reset del gioco in caso di errore
-    }
-  }
-
-  // Passa al turno successivo
-  function nextRound() {
-    sequence.push(Math.floor(Math.random() * colors.length));  // Aggiungi un nuovo colore alla sequenza
-    userSequence = [];  // Resetta la sequenza dell'utente
-    step++;
-    showSequence();  // Mostra la nuova sequenza
-  }
-
-  // Reset del gioco
-  function resetGame() {
-    sequence = [];  // Pulisci la sequenza
-    userSequence = [];  // Pulisci la sequenza dell'utente
-    step = 0;  // Resetta il passo
-    document.getElementById('status').textContent = 'Memorizza la sequenza!';
-    nextRound();  // Inizia una nuova partita
-  }
-
-  // Avvia il gioco
-  createGrid();  // Crea la griglia
-  resetGame();  // Inizia il gioco con una nuova sequenza
-</script>
-
 </body>
 </html>
