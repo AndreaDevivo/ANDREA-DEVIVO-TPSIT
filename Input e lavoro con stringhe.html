@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Stringhe con JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #00b2f8;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 20px;
+            margin: 15px 0;
+            width: 100%;
+            max-width: 300px;
+            border: 5px solid hsl(241, 100%, 50%);
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #01e1ff;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #cd29ff;
+        }
+
+        .output {
+            margin-top: 20px;
+        }
+
+        .output p {
+            font-size: 16px;
+        }
+
+        .error {
+            color: rgb(255, 239, 9);
+            font-weight: bold;
+        }
+
+        .info {
+            color: #000000;
+        }
+    </style>
+    <script>
+        
+        function calcolaLunghezza() {
+            var stringaA = document.getElementById("stringaA").value;
+            var stringaB = document.getElementById("stringaB").value;
+            document.getElementById("lunghezzaA").innerText = `Lunghezza stringa A: ${stringaA.length}`;
+            document.getElementById("lunghezzaB").innerText = `Lunghezza stringa B: ${stringaB.length}`;
+        }
+
+        
+        function invertiStringa() {
+            var stringaA = document.getElementById("stringaA").value;
+            var stringaB = document.getElementById("stringaB").value;
+            var invertitaA = stringaA.split("").reverse().join("");
+            var invertitaB = stringaB.split("").reverse().join("");
+            document.getElementById("inversaA").innerText = `Stringa A inversa: ${invertitaA}`;
+            document.getElementById("inversaB").innerText = `Stringa B inversa: ${invertitaB}`;
+        }
+
+       
+        function unisciStringhe() {
+            var stringaA = document.getElementById("stringaA").value;
+            var stringaB = document.getElementById("stringaB").value;
+            var unione = `${stringaA} ${stringaB}`;
+            document.getElementById("unione").innerText = `Unione delle stringhe: ${unione}`;
+        }
+
+        
+        function sommaLunghezze() {
+            var stringaA = document.getElementById("stringaA").value;
+            var stringaB = document.getElementById("stringaB").value;
+            var somma = stringaA.length + stringaB.length;
+            document.getElementById("sommaLunghezze").innerText = `Somma delle lunghezze: ${somma}`;
+
+            if (stringaB.length > 20) {
+                document.getElementById("errore").innerText = "Errore: la stringa B è troppo lunga!";
+            } else {
+                document.getElementById("errore").innerText = "";
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Gestione delle Stringhe</h2>
+    <form>
+        <label for="stringaA">Stringa A:</label>
+        <input type="text" id="stringaA" placeholder="Inserisci la stringa A">
+        <label for="stringaB">Stringa B:</label>
+        <input type="text" id="stringaB" placeholder="Inserisci la stringa B">
+        
+        <div>
+            <button type="button" onclick="calcolaLunghezza()">Calcola Lunghezza</button>
+            <button type="button" onclick="invertiStringa()">Inverti Stringhe</button>
+            <button type="button" onclick="unisciStringhe()">Unisci Stringhe</button>
+            <button type="button" onclick="sommaLunghezze()">Somma Lunghezze</button>
+        </div>
+    </form>
+
+    <div class="output">
+        <p id="lunghezzaA" class="info"></p>
+        <p id="lunghezzaB" class="info"></p>
+        <p id="inversaA" class="info"></p>
+        <p id="inversaB" class="info"></p>
+        <p id="unione" class="info"></p>
+        <p id="sommaLunghezze" class="info"></p>
+        <p id="errore" class="error"></p>
+    </div>
+
+</body>
+</html>
