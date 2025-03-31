@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Div Sovrapposti</title>
+<style>
+body {
+margin: 0;
+padding: 0;
+height: 100vh;
+background-color: #f0f0f0;
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+}
+
+.div {
+width: 100px;
+height: 100px;
+position: absolute;
+}
+
+.blue {
+background-color: blue;
+}
+
+.yellow {
+background-color: yellow;
+}
+
+.red {
+background-color: red !important;
+}
+</style>
+</head>
+<body>
+
+<div id="blueDiv" class="div blue"></div>
+<div id="yellowDiv" class="div yellow"></div>
+
+<script>
+function randomizePosition(div, offsetX = 0, offsetY = 0) {
+
+const x = Math.random() * (window.innerWidth - 100 - offsetX) + offsetX;
+const y = Math.random() * (window.innerHeight - 100 - offsetY) + offsetY;
+
+div.style.left = `${x}px`;
+div.style.top = `${y}px`;
+}
+
+function checkOverlap() {
+const blue = document.getElementById('blueDiv');
+const yellow = document.getElementById('yellowDiv');
+
+const blueRect = blue.getBoundingClientRect();
+const yellowRect = yellow.getBoundingClientRect();
+
+
+if (
+blueRect.left < yellowRect.right &&
+blueRect.right > yellowRect.left &&
+blueRect.top < yellowRect.bottom &&
+blueRect.bottom > yellowRect.top
+) {
+
+blue.classList.add('red');
+yellow.classList.add('red');
+} else {
+
+blue.classList.remove('red');
+yellow.classList.remove('red');
+}
+}
+
+function moveDivs() {
+const blue = document.getElementById('blueDiv');
+const yellow = document.getElementById('yellowDiv');
+
+
+randomizePosition(blue);
+
+
+randomizePosition(yellow, 50, 50); 
+
+checkOverlap();
+}
+
+
+setInterval(moveDivs, 1000);
+</script>
+
+</body>
+</html>
