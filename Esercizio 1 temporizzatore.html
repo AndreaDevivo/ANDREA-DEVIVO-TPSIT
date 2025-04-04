@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en"> 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Div Sovrapposti</title>
 <style>
 body {
-margin: 0;
-padding: 0;
-height: 100vh;
-background-color: #f0f0f0;
-display: flex;
-justify-content: center;
-align-items: center;
-position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #87CEEB; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  text-align: center;
 }
 
 .div {
-width: 100px;
-height: 100px;
-position: absolute;
+  width: 100px;
+  height: 100px;
+  position: absolute;
 }
 
 .blue {
-background-color: blue;
+  background-color: blue;
 }
 
 .yellow {
-background-color: yellow;
+  background-color: yellow;
 }
 
 .red {
-background-color: red !important;
+  background-color: red !important;
+}
+
+#timer {
+  font-size: 24px;
+  margin-top: 20px;
+  color: white;
 }
 </style>
 </head>
@@ -39,55 +47,68 @@ background-color: red !important;
 
 <div id="blueDiv" class="div blue"></div>
 <div id="yellowDiv" class="div yellow"></div>
+<div id="timer">Tempo: 0.00 secondi</div>
 
 <script>
+let startTime = null;
+let intervalId = null;
+
 function randomizePosition(div, offsetX = 0, offsetY = 0) {
+  const x = Math.random() * (window.innerWidth - 100 - offsetX) + offsetX;
+  const y = Math.random() * (window.innerHeight - 100 - offsetY) + offsetY;
 
-const x = Math.random() * (window.innerWidth - 100 - offsetX) + offsetX;
-const y = Math.random() * (window.innerHeight - 100 - offsetY) + offsetY;
-
-div.style.left = `${x}px`;
-div.style.top = `${y}px`;
+  div.style.left = `${x}px`;
+  div.style.top = `${y}px`;
 }
 
 function checkOverlap() {
-const blue = document.getElementById('blueDiv');
-const yellow = document.getElementById('yellowDiv');
+  const blue = document.getElementById('blueDiv');
+  const yellow = document.getElementById('yellowDiv');
 
-const blueRect = blue.getBoundingClientRect();
-const yellowRect = yellow.getBoundingClientRect();
+  const blueRect = blue.getBoundingClientRect();
+  const yellowRect = yellow.getBoundingClientRect();
 
+  if (
+    blueRect.left < yellowRect.right &&
+    blueRect.right > yellowRect.left &&
+    blueRect.top < yellowRect.bottom &&
+    blueRect.bottom > yellowRect.top
+  ) {
+    blue.classList.add('red');
+    yellow.classList.add('red');
 
-if (
-blueRect.left < yellowRect.right &&
-blueRect.right > yellowRect.left &&
-blueRect.top < yellowRect.bottom &&
-blueRect.bottom > yellowRect.top
-) {
-
-blue.classList.add('red');
-yellow.classList.add('red');
-} else {
-
-blue.classList.remove('red');
-yellow.classList.remove('red');
-}
+    
+    if (startTime !== null) {
+      const elapsedTime = (Date.now() - startTime) / 1000;
+      document.getElementById('timer').innerText = `Tempo: ${elapsedTime.toFixed(2)} secondi`;
+      clearInterval(intervalId); 
+    }
+  } else {
+    blue.classList.remove('red');
+    yellow.classList.remove('red');
+  }
 }
 
 function moveDivs() {
-const blue = document.getElementById('blueDiv');
-const yellow = document.getElementById('yellowDiv');
+  const blue = document.getElementById('blueDiv');
+  const yellow = document.getElementById('yellowDiv');
 
+  randomizePosition(blue);
+  randomizePosition(yellow, 50, 50);
 
-randomizePosition(blue);
+  checkOverlap();
+}
 
-
-randomizePosition(yellow, 50, 50); 
-
-checkOverlap();
+function startTimer() {
+  startTime = Date.now(); 
+  intervalId = setInterval(() => {
+    const elapsedTime = (Date.now() - startTime) / 1000; 
+    document.getElementById('timer').innerText = `Tempo: ${elapsedTime.toFixed(2)} secondi`;
+  }, 100); 
 }
 
 
+startTimer();
 setInterval(moveDivs, 1000);
 </script>
 
