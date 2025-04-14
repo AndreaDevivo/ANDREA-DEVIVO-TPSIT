@@ -41,10 +41,6 @@
         let playerScore = 0;
         let computerScore = 0;
 
-        let timeElapsed = 0; // Tempo trascorso per aumentare gradualmente la velocità della pallina
-        const speedIncreaseInterval = 5000; // Tempo in millisecondi tra ogni incremento della velocità
-        const speedMultiplier = 1.05; // Moltiplicatore di velocità ogni incremento
-
         // Disegna il paddle
         function drawPaddle(x, y) {
             ctx.fillStyle = 'white';
@@ -70,9 +66,9 @@
         // Gestisci il movimento del paddle del giocatore
         document.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowUp') {
-                playerSpeed = -8;
+                playerSpeed = -8; // Aumentato per far muovere più velocemente il paddle del giocatore
             } else if (e.key === 'ArrowDown') {
-                playerSpeed = 8;
+                playerSpeed = 8; // Aumentato per far muovere più velocemente il paddle del giocatore
             }
         });
         document.addEventListener('keyup', function () {
@@ -123,17 +119,13 @@
         function resetBall() {
             ballX = canvas.width / 2;
             ballY = canvas.height / 2;
-            ballSpeedX = 6;
-            ballSpeedY = 6;
-        }
+            ballSpeedX = 6; // Ripristina la velocità iniziale della pallina
+            ballSpeedY = 6; // Ripristina la velocità iniziale della pallina
 
-        // Incrementa la velocità della pallina gradualmente
-        function increaseBallSpeed() {
-            timeElapsed += 1000 / 60; // Aggiorna il tempo trascorso ogni frame (approssimazione)
-            if (timeElapsed >= speedIncreaseInterval) {
-                ballSpeedX *= speedMultiplier;
-                ballSpeedY *= speedMultiplier;
-                timeElapsed = 0; // Reset del tempo
+            // Aumenta la velocità della pallina a ogni punto fatto
+            if (playerScore % 5 === 0 || computerScore % 5 === 0) {
+                ballSpeedX *= 1.1;
+                ballSpeedY *= 1.1;
             }
         }
 
@@ -149,7 +141,6 @@
         // Aggiorna il gioco
         function update() {
             move();
-            increaseBallSpeed(); // Aumenta la velocità della pallina gradualmente
             draw();
             requestAnimationFrame(update);
         }
