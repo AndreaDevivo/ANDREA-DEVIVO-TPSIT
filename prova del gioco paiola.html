@@ -34,10 +34,10 @@
         let computerY = (canvas.height - paddleHeight) / 2;
         let ballX = canvas.width / 2;
         let ballY = canvas.height / 2;
-        let ballSpeedX = 4;
-        let ballSpeedY = 4;
+        let ballSpeedX = 6; // Aumentato per velocizzare la pallina
+        let ballSpeedY = 6; // Aumentato per velocizzare la pallina
         let playerSpeed = 0;
-        let computerSpeed = 4;
+        let computerSpeed = 6; // Aumentato per far muovere più velocemente il paddle del computer
         let playerScore = 0;
         let computerScore = 0;
 
@@ -66,9 +66,9 @@
         // Gestisci il movimento del paddle del giocatore
         document.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowUp') {
-                playerSpeed = -6;
+                playerSpeed = -8; // Aumentato per far muovere più velocemente il paddle del giocatore
             } else if (e.key === 'ArrowDown') {
-                playerSpeed = 6;
+                playerSpeed = 8; // Aumentato per far muovere più velocemente il paddle del giocatore
             }
         });
         document.addEventListener('keyup', function () {
@@ -119,8 +119,14 @@
         function resetBall() {
             ballX = canvas.width / 2;
             ballY = canvas.height / 2;
-            ballSpeedX = -ballSpeedX;
-            ballSpeedY = 4;
+            ballSpeedX = 6; // Ripristina la velocità iniziale della pallina
+            ballSpeedY = 6; // Ripristina la velocità iniziale della pallina
+
+            // Aumenta la velocità della pallina a ogni punto fatto
+            if (playerScore % 5 === 0 || computerScore % 5 === 0) {
+                ballSpeedX *= 1.1;
+                ballSpeedY *= 1.1;
+            }
         }
 
         // Disegna tutto
