@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quadrati Scorrevoli</title>
+  <style>
+    .fila {
+      display: flex;
+      gap: 10px;
+    }
+
+    .quadrato {
+      width: 50px;
+      height: 50px;
+      background-color: yellow;
+      transition: background-color 0.3s;
+    }
+
+    .rosso {
+      background-color: red !important;
+    }
+  </style>
+</head>
+<body>
+
+<h2>2) Quadrato rosso in scorrimento</h2>
+<div class="fila" id="fila">
+  <div class="quadrato rosso"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+  <div class="quadrato"></div>
+</div>
+
+<script>
+  const quadrati = document.querySelectorAll('.quadrato');
+  let index = 0;
+
+  setInterval(() => {
+    if (index < quadrati.length - 1) {
+      quadrati[index].classList.remove('rosso');
+      quadrati[index + 1].classList.add('rosso');
+      index++;
+    } else {
+      
+      quadrati[index].classList.remove('rosso');
+      index = 0;
+      quadrati[index].classList.add('rosso');
+    }
+  }, 600); 
+</script>
+
+</body>
+</html>
