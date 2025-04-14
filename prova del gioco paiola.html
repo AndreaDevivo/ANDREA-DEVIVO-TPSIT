@@ -34,16 +34,16 @@
         let computerY = (canvas.height - paddleHeight) / 2;
         let ballX = canvas.width / 2;
         let ballY = canvas.height / 2;
-        let ballSpeedX = 6;
-        let ballSpeedY = 6;
+        let ballSpeedX = 6; // Aumentato per velocizzare la pallina
+        let ballSpeedY = 6; // Aumentato per velocizzare la pallina
         let playerSpeed = 0;
-        let computerSpeed = 6;
+        let computerSpeed = 6; // Aumentato per far muovere più velocemente il paddle del computer
         let playerScore = 0;
         let computerScore = 0;
 
-        // Carica l'immagine di sfondo
-        const backgroundImage = new Image();
-        backgroundImage.src = 'https://example.com/path/to/your/image.jpg'; // Sostituisci con l'URL del tuo sfondo
+        let timeElapsed = 0; // Tempo trascorso per aumentare gradualmente la velocità della pallina
+        const speedIncreaseInterval = 5000; // Tempo in millisecondi tra ogni incremento della velocità
+        const speedMultiplier = 1.05; // Moltiplicatore di velocità ogni incremento
 
         // Disegna il paddle
         function drawPaddle(x, y) {
@@ -125,37 +125,37 @@
             ballY = canvas.height / 2;
             ballSpeedX = 6;
             ballSpeedY = 6;
+        }
 
-            // Aumenta la velocità della pallina ogni 3 punti fatti
-            if (playerScore % 3 === 0 || computerScore % 3 === 0) {
-                ballSpeedX *= 1.1;
-                ballSpeedY *= 1.1;
+        // Incrementa la velocità della pallina gradualmente
+        function increaseBallSpeed() {
+            timeElapsed += 1000 / 60; // Aggiorna il tempo trascorso ogni frame (approssimazione)
+            if (timeElapsed >= speedIncreaseInterval) {
+                ballSpeedX *= speedMultiplier;
+                ballSpeedY *= speedMultiplier;
+                timeElapsed = 0; // Reset del tempo
             }
         }
 
-        // Disegna tutto, inclusa l'immagine di sfondo
+        // Disegna tutto
         function draw() {
-            // Disegna l'immagine di sfondo
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-
-            // Disegna i paddles, la pallina e il punteggio
-            drawPaddle(0, playerY);
-            drawPaddle(canvas.width - paddleWidth, computerY);
-            drawBall(ballX, ballY);
-            drawScore();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPaddle(0, playerY); // Paddle giocatore
+            drawPaddle(canvas.width - paddleWidth, computerY); // Paddle computer
+            drawBall(ballX, ballY); // Pallina
+            drawScore(); // Punteggio
         }
 
         // Aggiorna il gioco
         function update() {
             move();
+            increaseBallSpeed(); // Aumenta la velocità della pallina gradualmente
             draw();
             requestAnimationFrame(update);
         }
 
-        // Inizia il gioco una volta che l'immagine di sfondo è caricata
-        backgroundImage.onload = function() {
-            update();
-        };
+        // Inizia il gioco
+        update();
     </script>
 </body>
 </html>
