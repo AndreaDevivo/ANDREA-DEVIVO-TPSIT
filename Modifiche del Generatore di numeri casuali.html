@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generatore di Numeri Casuali</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #007bff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #333;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 120px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #output {
+      margin-top: 30px;
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 20px;
+      border-radius: 5px;
+      max-height: 400px;
+      overflow-y: auto;
+      text-align: left;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generatore di Numeri Casuali</h1>
+    <div>
+      <label for="min">Minimo:</label>
+      <input type="number" id="min" value="0" step="any">
+      <label for="max">Massimo:</label>
+      <input type="number" id="max" value="1" step="any">
+    </div>
+    <button onclick="startGenerazione()">Genera Numeri</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    let arrayNumeriCasuali = [];
+    let arrayRapporti = [];
+    let arrayMedie = [];
+    let arrayDistanze = [];
+    let intervallo = null;
+
+    function startGenerazione() {
+      if (intervallo) clearInterval(intervallo);
+
+      const min = parseFloat(document.getElementById("min").value);
+      const max = parseFloat(document.getElementById("max").value);
+      const output = document.getElementById("output");
+
+      if (isNaN(min) || isNaN(max) || min >= max) {
+        alert("Inserisci un intervallo valido (min < max)!");
+        return;
+      }
+
+      arrayNumeriCasuali = [];
+      arrayRapporti = [];
+      arrayMedie = [];
+      arrayDistanze = [];
+      output.textContent = "";
+      let counter = 0;
+      const maxCount = 10000;
+      const mediaRange = (min + max) / 2;
+
+      intervallo = setInterval(() => {
+        if (counter >= maxCount) {
+          clearInterval(intervallo);
+          return;
+        }
+
+        const numero = parseFloat((Math.random() * (max - min) + min).toFixed(5));
+        arrayNumeriCasuali.push(numero);
+
+        if (arrayNumeriCasuali.length > 1) {
+          const precedente = arrayNumeriCasuali[arrayNumeriCasuali.length - 2];
+          const rapporto = precedente !== 0 ? (numero / precedente).toFixed(5) : "∞";
+          arrayRapporti.push(rapporto);
+        }
+
+        const distanza = Math.abs(numero - mediaRange).toFixed(5);
+        arrayDistanze.push(distanza); // ✅ ORA viene salvata
+
+        if (arrayNumeriCasuali.length % 50 === 0) {
+          const ultimi50 = arrayNumeriCasuali.slice(-50);
+          const ultimeDistanze = arrayDistanze.slice(-50);
+          const somma = ultimi50.reduce((acc, val) => acc + val, 0);
+          const media = (somma / 50).toFixed(5);
+          arrayMedie.push(media);
+
+          output.textContent +=
+            `Gruppo #${arrayMedie.length}:\n` +
+            `Numeri: ${ultimi50.join(", ")}\n` +
+            `Distanze da metà (${mediaRange.toFixed(5)}): ${ultimeDistanze.join(", ")}\n` +
+            `Media: ${media}\n\n`;
+
+          output.scrollTop = output.scrollHeight;
+        }
+
+        counter++;
+      }, 500);
+    }
+  </script>
+</body>
+</html>
