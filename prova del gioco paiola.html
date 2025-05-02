@@ -54,8 +54,8 @@
         if (ballX > paddleX && ballX < paddleX + paddleWidth) { 
           dy = -dy; 
           score++;  // Incrementa il punteggio solo quando la pallina colpisce la piattaforma
-          dx *= 1.05; // Incrementa la velocità orizzontale
-          dy *= 1.05; // Incrementa la velocità verticale
+          dx *= 1.1; // Incrementa la velocità orizzontale più velocemente
+          dy *= 1.1; // Incrementa la velocità verticale più velocemente
         } else { 
           gameOver = true; 
         }
