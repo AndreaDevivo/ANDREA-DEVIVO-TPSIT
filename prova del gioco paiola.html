@@ -9,120 +9,63 @@
       display: block;
       margin: 0 auto;
     }
-
-    #score {
-      text-align: center;
-      color: white;
-      font-size: 24px;
-      font-family: Arial, sans-serif;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas" width="400" height="600"></canvas>
-  <div id="score">Punteggio: 0</div>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height - 30;
-    let ballRadius = 10;
-    let dx = 2;
-    let dy = -3;
-
-    const paddleHeight = 10;
-    const paddleWidth = 75;
+    let ballX = canvas.width / 2, ballY = canvas.height - 30, ballRadius = 10, dx = 2, dy = -3;
+    const paddleHeight = 10, paddleWidth = 75;
     let paddleX = (canvas.width - paddleWidth) / 2;
+    let rightPressed = false, leftPressed = false;
+    let score = 0, gameOver = false;
 
-    let rightPressed = false;
-    let leftPressed = false;
-
-    let score = 0;
-    const scoreDisplay = document.getElementById("score");
-
-    let lastPaddleX = paddleX;
-    let idleTime = 0;
-    const maxIdleTime = 180; // ~3 secondi se 60fps
-
-    document.addEventListener("keydown", keyDownHandler);
-    document.addEventListener("keyup", keyUpHandler);
-
-    function keyDownHandler(e) {
+    document.addEventListener("keydown", (e) => {
       if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
       else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
-    }
-
-    function keyUpHandler(e) {
+    });
+    document.addEventListener("keyup", (e) => {
       if (e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
       else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
-    }
-
-    function drawBall() {
-      ctx.beginPath();
-      ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    function drawPaddle() {
-      ctx.beginPath();
-      ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
-      ctx.closePath();
-    }
+    });
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
-      drawPaddle();
+      ctx.fillStyle = "#fff";
+      ctx.font = "16px Arial";
+      ctx.fillText("Punteggio: " + score, 10, 20);
 
-      ballX += dx;
-      ballY += dy;
-
-      // Collisioni con muri
-      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
-        dx = -dx;
+      if (gameOver) {
+        ctx.font = "32px Arial";
+        ctx.fillStyle = "red";
+        ctx.fillText("GAME OVER!!", canvas.width / 2, canvas.height / 2);
+        return;
       }
 
-      if (ballY + dy < ballRadius) {
-        dy = -dy;
-      } else if (ballY + dy > canvas.height - ballRadius - 10) {
-        if (ballX > paddleX && ballX < paddleX + paddleWidth) {
-          dy = -dy;
-          dx *= 1.05;
-          dy *= 1.05;
-
-          score++;
-          scoreDisplay.textContent = "Punteggio: " + score;
-        } else {
-          alert("Game Over! Punteggio: " + score);
-          document.location.reload();
-        }
+      ballX += dx; ballY += dy;
+      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
+      if (ballY + dy < ballRadius) { dy = -dy; score++; }
+      else if (ballY + dy > canvas.height - ballRadius - 10) {
+        if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; score++; }
+        else { gameOver = true; }
       }
 
-      // Movimento piattaforma
-      if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-      } else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-      }
+      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 7;
+      else if (leftPressed && paddleX > 0) paddleX -= 7;
 
-      // Controllo inattività
-      if (paddleX === lastPaddleX) {
-        idleTime++;
-        if (idleTime > maxIdleTime) {
-          alert("Game Over! Non ti sei mosso per troppo tempo.");
-          document.location.reload();
-        }
-      } else {
-        idleTime = 0;
-        lastPaddleX = paddleX;
-      }
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+      ctx.fill();
+      ctx.closePath();
 
       requestAnimationFrame(draw);
     }
