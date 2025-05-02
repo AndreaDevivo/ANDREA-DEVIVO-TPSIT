@@ -17,63 +17,38 @@
       font-family: Arial, sans-serif;
       margin-top: 10px;
     }
-
-    #gameOverScreen {
-      display: none;
-      text-align: center;
-      color: white;
-      font-family: Arial, sans-serif;
-      margin-top: 20px;
-    }
-
-    #restartBtn {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas" width="400" height="600"></canvas>
   <div id="score">Punteggio: 0</div>
-  <div id="gameOverScreen">
-    <h2>Game Over!</h2>
-    <p id="finalScore"></p>
-    <button id="restartBtn">Ricomincia</button>
-  </div>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const scoreDisplay = document.getElementById("score");
-    const gameOverScreen = document.getElementById("gameOverScreen");
-    const finalScore = document.getElementById("finalScore");
-    const restartBtn = document.getElementById("restartBtn");
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height - 30;
+    let ballRadius = 10;
+    let dx = 2;
+    let dy = -3;
 
-    let ballX, ballY, dx, dy, paddleX, rightPressed, leftPressed, score;
-    const ballRadius = 10;
     const paddleHeight = 10;
     const paddleWidth = 75;
+    let paddleX = (canvas.width - paddleWidth) / 2;
 
-    function initGame() {
-      ballX = canvas.width / 2;
-      ballY = canvas.height - 30;
-      dx = 2;
-      dy = -3;
-      paddleX = (canvas.width - paddleWidth) / 2;
-      rightPressed = false;
-      leftPressed = false;
-      score = 0;
-      scoreDisplay.textContent = "Punteggio: 0";
-      gameOverScreen.style.display = "none";
-      draw();
-    }
+    let rightPressed = false;
+    let leftPressed = false;
+
+    let score = 0;
+    const scoreDisplay = document.getElementById("score");
+
+    let lastPaddleX = paddleX;
+    let idleTime = 0;
+    const maxIdleTime = 180; // ~3 secondi se 60fps
 
     document.addEventListener("keydown", keyDownHandler);
     document.addEventListener("keyup", keyUpHandler);
-    restartBtn.addEventListener("click", initGame);
 
     function keyDownHandler(e) {
       if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
@@ -94,24 +69,9 @@
     }
 
     function drawPaddle() {
-      const paddleY = canvas.height - paddleHeight - 10;
-      const radius = 5;
-
-      const gradient = ctx.createLinearGradient(paddleX, paddleY, paddleX + paddleWidth, paddleY);
-      gradient.addColorStop(0, "#00f");
-      gradient.addColorStop(1, "#0ff");
-
       ctx.beginPath();
-      ctx.moveTo(paddleX + radius, paddleY);
-      ctx.lineTo(paddleX + paddleWidth - radius, paddleY);
-      ctx.quadraticCurveTo(paddleX + paddleWidth, paddleY, paddleX + paddleWidth, paddleY + radius);
-      ctx.lineTo(paddleX + paddleWidth, paddleY + paddleHeight - radius);
-      ctx.quadraticCurveTo(paddleX + paddleWidth, paddleY + paddleHeight, paddleX + paddleWidth - radius, paddleY + paddleHeight);
-      ctx.lineTo(paddleX + radius, paddleY + paddleHeight);
-      ctx.quadraticCurveTo(paddleX, paddleY + paddleHeight, paddleX, paddleY + paddleHeight - radius);
-      ctx.lineTo(paddleX, paddleY + radius);
-      ctx.quadraticCurveTo(paddleX, paddleY, paddleX + radius, paddleY);
-      ctx.fillStyle = gradient;
+      ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#fff";
       ctx.fill();
       ctx.closePath();
     }
@@ -133,18 +93,15 @@
         dy = -dy;
       } else if (ballY + dy > canvas.height - ballRadius - 10) {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
-          // Rimbalzo angolato
-          dx += (ballX - (paddleX + paddleWidth / 2)) * 0.05;
           dy = -dy;
-
           dx *= 1.05;
           dy *= 1.05;
 
           score++;
           scoreDisplay.textContent = "Punteggio: " + score;
         } else {
-          showGameOver();
-          return;
+          alert("Game Over! Punteggio: " + score);
+          document.location.reload();
         }
       }
 
@@ -155,15 +112,22 @@
         paddleX -= 7;
       }
 
+      // Controllo inattività
+      if (paddleX === lastPaddleX) {
+        idleTime++;
+        if (idleTime > maxIdleTime) {
+          alert("Game Over! Non ti sei mosso per troppo tempo.");
+          document.location.reload();
+        }
+      } else {
+        idleTime = 0;
+        lastPaddleX = paddleX;
+      }
+
       requestAnimationFrame(draw);
     }
 
-    function showGameOver() {
-      finalScore.textContent = "Il tuo punteggio: " + score;
-      gameOverScreen.style.display = "block";
-    }
-
-    initGame();
+    draw();
   </script>
 </body>
 </html>
