@@ -9,30 +9,39 @@
       display: block;
       margin: 0 auto;
     }
+
+    #score {
+      text-align: center;
+      color: white;
+      font-size: 24px;
+      font-family: Arial, sans-serif;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <div id="score">Punteggio: 0</div>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Pallina
     let ballX = canvas.width / 2;
     let ballY = canvas.height - 30;
     let ballRadius = 10;
     let dx = 2;
     let dy = -3;
 
-    // Piattaforma
     const paddleHeight = 10;
     const paddleWidth = 75;
     let paddleX = (canvas.width - paddleWidth) / 2;
 
-    // Controlli
     let rightPressed = false;
     let leftPressed = false;
+
+    let score = 0;
+    const scoreDisplay = document.getElementById("score");
 
     document.addEventListener("keydown", keyDownHandler);
     document.addEventListener("keyup", keyUpHandler);
@@ -68,25 +77,37 @@
       drawBall();
       drawPaddle();
 
-      // Movimento pallina
       ballX += dx;
       ballY += dy;
 
-      // Collisioni con i muri
-      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
-      if (ballY + dy < ballRadius) dy = -dy;
-      else if (ballY + dy > canvas.height - ballRadius - 10) {
+      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
+        dx = -dx;
+      }
+
+      if (ballY + dy < ballRadius) {
+        dy = -dy;
+      } else if (ballY + dy > canvas.height - ballRadius - 10) {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
           dy = -dy;
+
+          // Aumenta la velocità
+          dx *= 1.05;
+          dy *= 1.05;
+
+          // Aumenta il punteggio
+          score++;
+          scoreDisplay.textContent = "Punteggio: " + score;
         } else {
-          alert("Game Over");
+          alert("Game Over! Punteggio: " + score);
           document.location.reload();
         }
       }
 
-      // Movimento piattaforma
-      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 7;
-      else if (leftPressed && paddleX > 0) paddleX -= 7;
+      if (rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      } else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;
+      }
 
       requestAnimationFrame(draw);
     }
