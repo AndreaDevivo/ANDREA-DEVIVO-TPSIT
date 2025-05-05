@@ -12,18 +12,21 @@
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <!-- Canvas -->
+  <canvas id="gameCanvas" width="750" height="600"></canvas>
 
   <script>
+    // Definizioni globali e inizializzazione
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    let ballX = canvas.width / 2, ballY = canvas.height - 30, ballRadius = 10, dx = 2, dy = -3;
+    let ballX = canvas.width / 2, ballY = canvas.height - 30, ballRadius = 10, dx = 2.5, dy = -3.5;
     const paddleHeight = 10, paddleWidth = 75;
     let paddleX = (canvas.width - paddleWidth) / 2;
     let rightPressed = false, leftPressed = false;
     let score = 0, gameOver = false;
 
+    // Aggiungi eventi per il movimento della piattaforma
     document.addEventListener("keydown", (e) => {
       if (e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
       else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
@@ -33,12 +36,17 @@
       else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
     });
 
+    // Funzione principale di disegno (renderizza la pallina, la piattaforma, e gestisce le collisioni)
     function draw() {
+      // Pulisce il canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Visualizza il punteggio
       ctx.fillStyle = "#fff";
       ctx.font = "16px Arial";
       ctx.fillText("Punteggio: " + score, 10, 20);
 
+      // Se il gioco è finito, mostra il messaggio di Game Over
       if (gameOver) {
         ctx.font = "32px Arial";
         ctx.fillStyle = "red";
@@ -47,36 +55,55 @@
         return;
       }
 
-      ballX += dx; ballY += dy;
-      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
-      if (ballY + dy < ballRadius) { dy = -dy; }
+      // Movimento della pallina
+      ballX += dx;
+      ballY += dy;
+
+      // Collisione con le pareti laterali
+      if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
+        dx = -dx;
+      }
+
+      // Collisione con il soffitto
+      if (ballY + dy < ballRadius) {
+        dy = -dy;
+      } 
+      // Collisione con la piattaforma
       else if (ballY + dy > canvas.height - ballRadius - 10) {
-        if (ballX > paddleX && ballX < paddleX + paddleWidth) { 
-          dy = -dy; 
-          score++;  // Incrementa il punteggio solo quando la pallina colpisce la piattaforma
-          dx *= 1.1; // Incrementa la velocità orizzontale più velocemente
-          dy *= 1.1; // Incrementa la velocità verticale più velocemente
-        } else { 
-          gameOver = true; 
+        if (ballX > paddleX && ballX < paddleX + paddleWidth) {
+          dy = -dy;
+          score++;
+          dx *= 1.1; // Aumenta la velocità orizzontale
+          dy *= 1.1; // Aumenta la velocità verticale
+        } else {
+          gameOver = true;
         }
       }
 
-      if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 7;
-      else if (leftPressed && paddleX > 0) paddleX -= 7;
+      // Movimento della piattaforma (paddle)
+      if (rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      } else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;
+      }
 
+      // Disegna la pallina
       ctx.beginPath();
       ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
       ctx.fill();
       ctx.closePath();
 
+      // Disegna la piattaforma
       ctx.beginPath();
       ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
       ctx.fill();
       ctx.closePath();
 
+      // Chiamata ricorsiva per continuare il gioco
       requestAnimationFrame(draw);
     }
 
+    // Avvia il gioco
     draw();
   </script>
 </body>
