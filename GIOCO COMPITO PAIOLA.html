@@ -36,6 +36,9 @@
       else if (e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
     });
 
+    // Modifica la velocità orizzontale e verticale con un moltiplicatore più graduale
+    let speedMultiplier = 1.05; // Moltiplicatore più graduale per la velocità
+
     // Funzione principale di disegno (renderizza la pallina, la piattaforma, e gestisce le collisioni)
     function draw() {
       // Pulisce il canvas
@@ -73,8 +76,9 @@
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
           dy = -dy;
           score++;
-          dx *= 1.1; // Aumenta la velocità orizzontale
-          dy *= 1.1; // Aumenta la velocità verticale
+          // Aumenta la velocità in modo più graduale
+          dx *= speedMultiplier;
+          dy *= speedMultiplier;
         } else {
           gameOver = true;
         }
