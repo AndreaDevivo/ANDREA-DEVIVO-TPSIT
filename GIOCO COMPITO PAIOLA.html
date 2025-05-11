@@ -9,9 +9,19 @@
       display: block;
       margin: 0 auto;
     }
+
+    #startButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
+  <!-- Pulsante per iniziare il gioco -->
+  <button id="startButton">Inizia Gioco</button>
+
   <!-- Canvas -->
   <canvas id="gameCanvas" width="750" height="600"></canvas>
 
@@ -107,8 +117,14 @@
       requestAnimationFrame(draw);
     }
 
-    // Avvia il gioco
-    draw();
+    // Funzione per avviare il gioco al click del bottone
+    function startGame() {
+      document.getElementById("startButton").style.display = "none";
+      draw();
+    }
+
+    // Assegna l'evento al pulsante
+    document.getElementById("startButton").addEventListener("click", startGame);
   </script>
 </body>
 </html>
