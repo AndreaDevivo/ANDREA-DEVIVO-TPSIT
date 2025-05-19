@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Trova il Numero Più Piccolo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .number-btn {
+      font-size: 2em;
+      padding: 20px;
+      margin: 10px;
+      cursor: pointer;
+      width: 100px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Trova il Numero Più Piccolo!</h1>
+  <p>Clicca sul numero più piccolo il più velocemente possibile.</p>
+  <div id="buttons"></div>
+  <button onclick="startGame()">Inizia</button>
+
+  <div id="results"></div>
+
+  <script>
+    let reactionTimes = [];
+    let startTime = 0;
+    let correctNumber = 0;
+
+    function startGame() {
+      const buttonsContainer = document.getElementById("buttons");
+      buttonsContainer.innerHTML = "";
+      const numbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 100));
+      correctNumber = Math.min(...numbers);
+
+      numbers.forEach(num => {
+        const btn = document.createElement("button");
+        btn.className = "number-btn";
+        btn.textContent = num;
+        btn.onclick = () => handleChoice(num);
+        buttonsContainer.appendChild(btn);
+      });
+
+      startTime = Date.now();
+    }
+
+    function handleChoice(selectedNumber) {
+      const endTime = Date.now();
+      const reactionTime = (endTime - startTime) / 1000;
+
+      if (selectedNumber === correctNumber) {
+        reactionTimes.push(reactionTime);
+        alert(`Corretto! Tempo di reazione: ${reactionTime.toFixed(2)} secondi`);
+      } else {
+        alert("Sbagliato! Riprova!");
+      }
+
+      showResults();
+    }
+
+    function showResults() {
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = `
+        <h3>Tempi di reazione:</h3>
+        <ul>
+          ${reactionTimes.map(t => `<li>${t.toFixed(2)} s</li>`).join("")}
+        </ul>
+      `;
+    }
+  </script>
+
+</body>
+</html>
