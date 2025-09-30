@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue Esercizi - Andrea</title>
+  <script src="https://unpkg.com/vue@3.4.15/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+   
+    <h2>Profilo Utente</h2>
+    <p>Nome: {{ nome }}</p>
+    <p>Cognome: {{ cognome }}</p>
+    <p>Città: {{ citta }}</p>
+
+    
+    <h2>Dettagli Prodotto</h2>
+    <p>Il prodotto {{ nomeProdotto }} costa {{ prezzo }} €</p>
+
+    
+    <h2>Bottone Disabilitato</h2>
+    <button v-bind:disabled="bottoneDisabilitato">Azione Importante</button>
+    <p>Il bottone è attualmente: <strong>{{ bottoneDisabilitato ? "Disabilitato" : "Attivo" }}</strong></p>
+
+    
+    <h2>Tooltip Dinamico</h2>
+    <p :title="messaggioTooltip">Questo è un messaggio Tooltip</p>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          // Esercizio 1: Profilo Utente
+          nome: "Andrea",
+          cognome: "De Vivo",
+          citta: "None, provicia di Torino",
+
+          // Esercizio 2: Prodotto
+          nomeProdotto: "NBA 2k26 PS5",
+          prezzo: 60.00,
+
+          // Esercizio 3: Bottone Disabilitato
+          bottoneDisabilitato: true, 
+
+          // Esercizio 4: Tooltip Dinamico
+          messaggioTooltip: "Questo è un messaggio Tooltip!"
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
