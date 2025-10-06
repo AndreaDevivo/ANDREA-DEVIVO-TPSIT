@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Esercizio lezione 2</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    .semaforo div { margin: 10px 0; padding: 10px; color: white; width: 150px; }
+    .rosso { background-color: red; }
+    .giallo { background-color: orange; }
+    .verde { background-color: green; }
+    table { border-collapse: collapse; width: 400px; margin-top: 10px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+
+  
+  <h2>1. Login Utente</h2>
+  <div id="loginMessage"></div>
+
+
+  <h2>2. Semaforo</h2>
+  <div class="semaforo" id="semaforoDisplay"></div>
+
+  
+  <h2>3. Classifica Team Preferiti</h2>
+  <ol id="teamList"></ol>
+
+ 
+  <h2>4. Catalogo Prodotti</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Prezzo (€)</th>
+      </tr>
+    </thead>
+    <tbody id="productTable"></tbody>
+  </table>
+
+  <script>
+    
+    const isLoggedIn = true; 
+    const loginMessage = document.getElementById("loginMessage");
+    loginMessage.textContent = isLoggedIn ? "Benvenuto, Utente!" : "Per favore, accedi.";
+
+    
+    const coloreSemaforo = "giallo"; 
+    const semaforoDiv = document.getElementById("semaforoDisplay");
+
+    if (coloreSemaforo === "rosso") {
+      semaforoDiv.innerHTML = `<div class="rosso">Stop</div>`;
+    } else if (coloreSemaforo === "giallo") {
+      semaforoDiv.innerHTML = `<div class="giallo">Attenzione</div>`;
+    } else if (coloreSemaforo === "verde") {
+      semaforoDiv.innerHTML = `<div class="verde">Vai!</div>`;
+    } else {
+      semaforoDiv.innerHTML = `<div>Colore non valido</div>`;
+    }
+
+    
+    const teamPreferiti = ["Napoli", "Barcelona", "Como"];
+    const teamList = document.getElementById("teamList");
+
+    teamPreferiti.forEach(team => {
+      const li = document.createElement("li");
+      li.textContent = team;
+      teamList.appendChild(li);
+    });
+
+    
+    const prodotti = [
+      { id: 1, nome: "Nba 2k26 ps5", prezzo: 60.00 },
+      { id: 2, nome: "computer portatile HP", prezzo: 230.00 },
+      { id: 3, nome: "Auricolari", prezzo: 59.99 }
+    ];
+
+    const productTable = document.getElementById("productTable");
+
+    prodotti.forEach(prodotto => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${prodotto.id}</td>
+        <td>${prodotto.nome}</td>
+        <td>${prodotto.prezzo.toFixed(2)}</td>
+      `;
+      productTable.appendChild(row);
+    });
+  </script>
+
+</body>
+</html>
