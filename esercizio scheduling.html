@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calcolo Scheduling Processi</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+
+<h1>Calcolo Scheduling Processi</h1>
+
+<p><strong>Processi:</strong></p>
+<table>
+  <tr>
+    <th>Processo</th><th>Arrivo</th><th>Burst</th>
+  </tr>
+  <tr><td>P1</td><td>0</td><td>20</td></tr>
+  <tr><td>P2</td><td>8</td><td>5</td></tr>
+  <tr><td>P3</td><td>3</td><td>12</td></tr>
+  <tr><td>P4</td><td>10</td><td>6</td></tr>
+  <tr><td>P5</td><td>7</td><td>8</td></tr>
+</table>
+
+<br>
+
+<button onclick="calculateAll()">Calcola FCFS, SSJF, SRTF</button>
+
+<pre id="output" style="background: #f9f9f9; padding: 10px; border: 1px solid #ccc;"></pre>
+
+<script>
+const processes = [
+  { name: "P1", arrival: 0, burst: 20 },
+  { name: "P2", arrival: 8, burst: 5 },
+  { name: "P3", arrival: 3, burst: 12 },
+  { name: "P4", arrival: 10, burst: 6 },
+  { name: "P5", arrival: 7, burst: 8 }
+];
+
+function calculateFCFS(processes) {
+  const sorted = [...processes].sort((a, b) => a.arrival - b.arrival);
+  let current = 0, totalWait = 0, totalTAT = 0;
+  sorted.forEach(p => {
+    if (current < p.arrival) current = p.arrival;
+    p.start = current;
+    p.wait = current - p.arrival;
+    p.tat = p.wait + p.burst;
+    current += p.burst;
+    totalWait += p.wait;
+    totalTAT += p.tat;
+  });
+  return {
+    name: "FCFS",
+    avgWait: totalWait / processes.length,
+    avgTAT: totalTAT / processes.length
+  };
+}
+
+function calculateSSJF(processes) {
+  const queue = [...processes];
+  let current = 0, totalWait = 0, totalTAT = 0, done = 0;
+  const completed = [];
+  while (done < processes.length) {
+    const ready = queue.filter(p => p.arrival <= current);
+    if (ready.length === 0) {
+      current++;
+      continue;
+    }
+    const shortest = ready.sort((a, b) => a.burst - b.burst)[0];
+    queue.splice(queue.indexOf(shortest), 1);
+    shortest.start = current;
+    shortest.wait = current - shortest.arrival;
+    shortest.tat = shortest.wait + shortest.burst;
+    current += shortest.burst;
+    totalWait += shortest.wait;
+    totalTAT += shortest.tat;
+    completed.push(shortest);
+    done++;
+  }
+  return {
+    name: "SSJF (non-preemptive)",
+    avgWait: totalWait / processes.length,
+    avgTAT: totalTAT / processes.length
+  };
+}
+
+function calculateSRTF(processes) {
+  let time = 0;
+  const n = processes.length;
+  const remaining = processes.map(p => ({ ...p, remaining: p.burst, done: false }));
+  let completed = 0, totalWait = 0, totalTAT = 0;
+
+  const waitTimes = {};
+  const startTimes = {};
+  const endTimes = {};
+
+  while (completed < n) {
+    const ready = remaining.filter(p => p.arrival <= time && p.remaining > 0);
+    if (ready.length === 0) {
+      time++;
+      continue;
+    }
+    const shortest = ready.sort((a, b) => a.remaining - b.remaining)[0];
+    if (!(shortest.name in startTimes)) startTimes[shortest.name] = time;
+
+    shortest.remaining--;
+    time++;
+
+    if (shortest.remaining === 0) {
+      completed++;
+      const finish = time;
+      const turnaround = finish - shortest.arrival;
+      const wait = turnaround - shortest.burst;
+      totalWait += wait;
+      totalTAT += turnaround;
+    }
+  }
+
+  return {
+    name: "SRTF (preemptive)",
+    avgWait: totalWait / n,
+    avgTAT: totalTAT / n
+  };
+}
+
+function calculateAll() {
+  const fcfs = calculateFCFS(processes);
+  const ssjf = calculateSSJF(processes);
+  const srtf = calculateSRTF(processes);
+
+  document.getElementById("output").textContent = `
+=== RISULTATI ===
+
+${fcfs.name}
+  - Tempo medio di attesa: ${fcfs.avgWait.toFixed(2)}
+  - Tempo medio di turnaround: ${fcfs.avgTAT.toFixed(2)}
+
+${ssjf.name}
+  - Tempo medio di attesa: ${ssjf.avgWait.toFixed(2)}
+  - Tempo medio di turnaround: ${ssjf.avgTAT.toFixed(2)}
+
+${srtf.name}
+  - Tempo medio di attesa: ${srtf.avgWait.toFixed(2)}
+  - Tempo medio di turnaround: ${srtf.avgTAT.toFixed(2)}
+  `;
+}
+</script>
+
+</body>
+</html>
