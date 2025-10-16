@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scheduling Simulator con IA</title>
+  <style>
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+    .gantt { display: flex; margin-top: 20px; }
+    .gantt div { padding: 10px; margin-right: 2px; background: lightblue; border: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <h1>Simulatore di Algoritmi di Scheduling</h1>
+  <textarea id="jsonInput" rows="15" cols="60">
+{
+  "tasks": [],
+  "algorithm": "FCFS",
+  "quantum": 2,
+  "generate_tasks": true,
+  "task_count": 5
+}
+  </textarea>
+  <br><br>
+  <button onclick="simulate()">Simula</button>
+  <div id="output"></div>
+
+  <script>
+    function generateTasks(n) {
+      const tasks = [];
+      for (let i = 0; i < n; i++) {
+        tasks.push({
+          id: "T" + (i + 1),
+          arrival_time: i, // crescente
+          burst_time: Math.floor(Math.random() * 9) + 1,
+          priority: Math.floor(Math.random() * 5) + 1
+        });
+      }
+      return tasks;
+    }
+
+    function simulate() {
+      const input = JSON.parse(document.getElementById("jsonInput").value);
+      let tasks = input.tasks;
+      if ((!tasks || tasks.length === 0) && input.generate_tasks) {
+        tasks = generateTasks(input.task_count || 5);
+      }
+
+      const algorithm = input.algorithm.toUpperCase();
+      const quantum = input.quantum || 2;
+      let scheduled = [];
+
+      switch (algorithm) {
+        case 'FCFS': scheduled = fcfs(tasks); break;
+        case 'SJF': scheduled = sjf(tasks); break;
+        case 'PRIORITY': scheduled = priority(tasks); break;
+        case 'RR': scheduled = roundRobin(tasks, quantum); break;
+        default: alert("Algoritmo non supportato."); return;
+      }
+
+      renderOutput(scheduled, tasks);
+    }
+
+    function fcfs(tasks) {
+      const sorted = [...tasks].sort((a, b) => a.arrival_time - b.arrival_time);
+      let currentTime = 0;
+      return sorted.map(t => {
+        const start = Math.max(currentTime, t.arrival_time);
+        const end = start + t.burst_time;
+        currentTime = end;
+        return { id: t.id, start, end };
+      });
+    }
+
+    function sjf(tasks) {
+      const queue = [...tasks];
+      let time = 0, result = [];
+      while (queue.length > 0) {
+        const available = queue.filter(t => t.arrival_time <= time);
+        if (available.length === 0) {
+          time++;
+          continue;
+        }
+        const shortest = available.sort((a, b) => a.burst_time - b.burst_time)[0];
+        queue.splice(queue.indexOf(shortest), 1);
+        result.push({ id: shortest.id, start: time, end: time + shortest.burst_time });
+        time += shortest.burst_time;
+      }
+      return result;
+    }
+
+    function priority(tasks) {
+      const queue = [...tasks];
+      let time = 0, result = [];
+      while (queue.length > 0) {
+        const available = queue.filter(t => t.arrival_time <= time);
+        if (available.length === 0) {
+          time++;
+          continue;
+        }
+        const highPrio = available.sort((a, b) => a.priority - b.priority)[0];
+        queue.splice(queue.indexOf(highPrio), 1);
+        result.push({ id: highPrio.id, start: time, end: time + highPrio.burst_time });
+        time += highPrio.burst_time;
+      }
+      return result;
+    }
+
+    function roundRobin(tasks, quantum) {
+      const queue = [];
+      const sorted = [...tasks].sort((a, b) => a.arrival_time - b.arrival_time);
+      let time = 0, index = 0, result = [];
+      const remaining = {};
+      sorted.forEach(t => remaining[t.id] = t.burst_time);
+
+      while (queue.length > 0 || index < sorted.length) {
+        while (index < sorted.length && sorted[index].arrival_time <= time) {
+          queue.push(sorted[index++]);
+        }
+
+        if (queue.length === 0) {
+          time = sorted[index].arrival_time;
+          continue;
+        }
+
+        const task = queue.shift();
+        const execTime = Math.min(quantum, remaining[task.id]);
+        result.push({ id: task.id, start: time, end: time + execTime });
+        time += execTime;
+        remaining[task.id] -= execTime;
+
+        if (remaining[task.id] > 0) queue.push(task);
+      }
+
+      return result;
+    }
+
+    function renderOutput(scheduled, originalTasks) {
+      const out = document.getElementById("output");
+      out.innerHTML = "<h3>Risultati</h3>";
+      let table = `<table><tr><th>Task</th><th>Start</th><th>End</th></tr>`;
+      scheduled.forEach(s => {
+        table += `<tr><td>${s.id}</td><td>${s.start}</td><td>${s.end}</td></tr>`;
+      });
+      table += `</table>`;
+      out.innerHTML += table;
+
+      // Gantt chart
+      out.innerHTML += "<h4>Gantt Chart</h4><div class='gantt'>";
+      scheduled.forEach(s => {
+        out.innerHTML += `<div>${s.id}<br>(${s.start}-${s.end})</div>`;
+      });
+      out.innerHTML += "</div>";
+    }
+  </script>
+</body>
+</html>
