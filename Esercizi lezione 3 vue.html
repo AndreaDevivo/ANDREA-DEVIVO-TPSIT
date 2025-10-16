@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Esercizi Vue</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+    section { margin-bottom: 30px; }
+    input, select, button { margin-top: 5px; margin-bottom: 10px; display: block; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    
+    <!-- 1. Cambia Messaggio -->
+    <section>
+      <h2>1. Cambia Messaggio</h2>
+      <p>{{ messaggio }}</p>
+      <button @click="cambiaMessaggio">Clicca qui</button>
+    </section>
+
+    <!-- 2. Accendi/Spegni -->
+    <section>
+      <h2>2. Accendi/Spegni</h2>
+      <button @click="toggleLuce">Toggle Luce</button>
+      <p>{{ luceAccesa ? "La luce è accesa" : "La luce è spenta" }}</p>
+    </section>
+
+    <!-- 3. Convertitore di Unità Semplice -->
+    <section>
+      <h2>3. Convertitore di Unità (Kg -> g)</h2>
+      <label>Inserisci il peso in chilogrammi:</label>
+      <input type="number" v-model.number="chilogrammi" />
+      <p>{{ chilogrammi }} kg = {{ chilogrammi * 1000 }} grammi</p>
+    </section>
+
+    <!-- 4. Form di Registrazione Semplice -->
+    <section>
+      <h2>4. Form di Registrazione</h2>
+      <form @submit.prevent>
+        <label>Nome:</label>
+        <input type="text" v-model="nome" />
+
+        <label>Genere:</label>
+        <label><input type="radio" value="Uomo" v-model="genere" /> Uomo</label>
+        <label><input type="radio" value="Donna" v-model="genere" /> Donna</label>
+        <label><input type="radio" value="Altro" v-model="genere" /> Altro</label>
+
+        <label>Paese:</label>
+        <select v-model="paese">
+          <option value="Italia">Italia</option>
+          <option value="Germania">Germania</option>
+          <option value="Francia">Francia</option>
+        </select>
+      </form>
+
+      <h3>Riepilogo:</h3>
+      <p><strong>Nome:</strong> {{ nome }}</p>
+      <p><strong>Genere:</strong> {{ genere }}</p>
+      <p><strong>Paese:</strong> {{ paese }}</p>
+    </section>
+
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          // Esercizio 1
+          messaggio: "Clicca il pulsante per cambiare il messaggio.",
+          
+          // Esercizio 2
+          luceAccesa: false,
+
+          // Esercizio 3
+          chilogrammi: 0,
+
+          // Esercizio 4
+          nome: '',
+          genere: '',
+          paese: 'Italia'
+        };
+      },
+      methods: {
+        cambiaMessaggio() {
+          this.messaggio = "Hai cliccato il bottone!";
+        },
+        toggleLuce() {
+          this.luceAccesa = !this.luceAccesa;
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
