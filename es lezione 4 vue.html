@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Esempio Vue.js</title>
+  <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .errore { color: red; }
+    .successo { color: green; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  
+  <h2>1. Controllo Maggiore Età</h2>
+  <label>Inserisci la tua età:
+    <input type="number" v-model="eta" min="0">
+  </label>
+  <p>Stato: <strong>{{ messaggioEta }}</strong></p>
+
+  <hr>
+
+  
+  <h2>2. Carrello Semplice</h2>
+  <ul>
+    <li v-for="(prodotto, index) in carrello" :key="index">
+      {{ prodotto.nome }} - €{{ prodotto.prezzo.toFixed(2) }}
+    </li>
+  </ul>
+  <p><strong>Totale: €{{ totaleCarrello.toFixed(2) }}</strong></p>
+
+  <hr>
+
+
+  <h2>3. Validazione Username</h2>
+  <label>Username:
+    <input type="text" v-model="username">
+  </label>
+  <p v-if="erroreUsername" class="errore"> Username troppo corto (minimo 5 caratteri)</p>
+
+  <hr>
+
+  
+  <h2>4. Salvataggio Automatico</h2>
+  <label>Note:
+    <textarea v-model="testo" rows="4" cols="40"></textarea>
+  </label>
+  <p :class="salvataggio === 'Salvato!' ? 'successo' : ''">{{ salvataggio }}</p>
+</div>
+
+<script>
+const { createApp, watch } = Vue;
+
+createApp({
+  data() {
+    return {
+      
+      eta: 0,
+
+      
+      carrello: [
+        { nome: 'Maglietta', prezzo: 19.99 },
+        { nome: 'Jeans', prezzo: 49.90 },
+        { nome: 'Scarpe', prezzo: 89.50 },
+      ],
+
+     
+      username: '',
+      erroreUsername: false,
+
+      
+      testo: '',
+      salvataggio: ''
+    };
+  },
+  computed: {
+    
+    messaggioEta() {
+      return this.eta >= 18 ? 'Maggiorenne' : 'Minorenne';
+    },
+
+    
+    totaleCarrello() {
+      return this.carrello.reduce((totale, prodotto) => totale + prodotto.prezzo, 0);
+    }
+  },
+  watch: {
+    
+    username(newVal) {
+      this.erroreUsername = newVal.length > 0 && newVal.length < 5;
+    },
+
+    
+    testo() {
+      this.salvataggio = "Sto salvando...";
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.salvataggio = "Salvato!";
+      }, 1000);
+    }
+  },
+  mounted() {
+    this.timeout = null;
+  }
+}).mount('#app');
+</script>
+
+</body>
+</html>
