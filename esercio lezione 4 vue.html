@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Esempio Vue.js</title>
+  <title>Esercizio lezione 4</title>
   <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
@@ -34,7 +34,7 @@
   <hr>
 
 
-  <h2>3. Validazione Username</h2>
+  <h2>3. Controllo dell'Username</h2>
   <label>Username:
     <input type="text" v-model="username">
   </label>
@@ -97,7 +97,7 @@ createApp({
       this.salvataggio = "Sto salvando...";
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
-        this.salvataggio = "Salvato!";
+        this.salvataggio = "Salvataggio completato!";
       }, 1000);
     }
   },
