@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>ESERCIZIO LEZIONE 5</title>
   <style>
-    /* --- Stili generali --- */
+    
     body {
       font-family: Arial, sans-serif;
       margin: 30px;
@@ -14,21 +14,21 @@
       margin-top: 40px;
     }
 
-    /* --- Stato del Messaggio --- */
+    
     #message-box {
-      padding: 20px;
+      padding: 30px;
       margin-bottom: 15px;
       border-radius: 7px;
-      color: white;
+      color: rgb(0, 225, 255);
       font-weight: bold;
       text-align: center;
       transition: background-color 0.3s;
     }
     .success {
-      background-color: #4caf50; /* verde */
+      background-color: #4caf50; 
     }
     .error {
-      background-color: #f44336; /* rosso */
+      background-color: #f44336; 
     }
     button {
       margin-right: 10px;
@@ -40,7 +40,7 @@
     .btn-success { background-color: #4caf50; color: white; }
     .btn-error { background-color: #f44336; color: white; }
 
-    /* --- Avatar Personalizzabile --- */
+    
     #avatar {
       margin-top: 20px;
       border-radius: 50%;
@@ -51,7 +51,7 @@
       margin: 10px 0;
     }
 
-    /* --- Saluto Personale --- */
+    
     .saluto-utente {
       background-color: #fff;
       padding: 10px;
@@ -60,7 +60,7 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
 
-    /* --- Card Semplice --- */
+    
     .info-card {
       background-color: #fff;
       padding: 15px;
@@ -77,48 +77,48 @@
 </head>
 <body>
 
-  <h1>Esercizio - HTML, CSS e JS</h1>
+  <h1>Esercizio Lezione 5</h1>
 
-  <!-- Stato del Messaggio -->
+  
   <h2>Stato del Messaggio</h2>
-  <div id="message-box">Questo è un messaggio</div>
-  <button class="btn-success" onclick="setMessage('success')">Imposta come Successo</button>
-  <button class="btn-error" onclick="setMessage('error')">Imposta come Errore</button>
+  <div id="message-box">Questo è un messaggio!!</div>
+  <button class="btn-success" onclick="setMessage('success')">Esecuzione svolta con Successo!</button>
+  <button class="btn-error" onclick="setMessage('error')">OPS!, c'è un errore!</button>
 
-  <!-- Avatar Personalizzabile -->
-  <h2>Avatar Personalizzabile</h2>
+  
+  <h2>Personalizzazione Avatar</h2>
   <div id="avatar" style="width:100px; height:100px; background-color:#2196f3;"></div>
   
   <div class="input-group">
-    <label>Larghezza: </label>
+    <label>Larghezza dell'Avatar: </label>
     <input type="number" id="widthInput" value="100" onchange="updateAvatar()">
   </div>
   <div class="input-group">
-    <label>Altezza: </label>
+    <label>Altezza dell'Avatar: </label>
     <input type="number" id="heightInput" value="100" onchange="updateAvatar()">
   </div>
   <div class="input-group">
-    <label>Colore di sfondo: </label>
+    <label>Colore di sfondo Avatar: </label>
     <input type="color" id="colorInput" value="#2196f3" onchange="updateAvatar()">
   </div>
 
-  <!-- Saluto Personale -->
+  
   <h2>Saluto Personale</h2>
   <div class="saluto-utente">Benvenuto nella nostra applicazione!</div>
   <div class="saluto-utente">Benvenuto nella nostra applicazione!</div>
 
-  <!-- Card Semplice -->
+  
   <h2>Card Semplice</h2>
   <div class="info-card">
     <h3>Titolo della Card</h3>
-    <p>Contenuto della card...</p>
+    <p>Contenuto della card</p>
   </div>
 
   <script>
-    // --- Stato del Messaggio ---
+    
     function setMessage(type) {
       const messageBox = document.getElementById('message-box');
-      messageBox.className = ''; // reset classi
+      messageBox.className = ''; 
       if (type === 'success') {
         messageBox.classList.add('success');
         messageBox.textContent = 'Operazione completata con successo!';
@@ -128,7 +128,7 @@
       }
     }
 
-    // --- Avatar Personalizzabile ---
+    
     function updateAvatar() {
       const avatar = document.getElementById('avatar');
       const width = document.getElementById('widthInput').value;
