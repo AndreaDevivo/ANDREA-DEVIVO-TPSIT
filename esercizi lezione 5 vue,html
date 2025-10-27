@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Esercizio HTML - Stato Messaggio, Avatar, Saluto e Card</title>
+  <style>
+    /* --- Stili generali --- */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+
+    /* --- Stato del Messaggio --- */
+    #message-box {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    .success {
+      background-color: #4caf50; /* verde */
+    }
+    .error {
+      background-color: #f44336; /* rosso */
+    }
+    button {
+      margin-right: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-success { background-color: #4caf50; color: white; }
+    .btn-error { background-color: #f44336; color: white; }
+
+    /* --- Avatar Personalizzabile --- */
+    #avatar {
+      margin-top: 20px;
+      border-radius: 50%;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .input-group {
+      margin: 10px 0;
+    }
+
+    /* --- Saluto Personale --- */
+    .saluto-utente {
+      background-color: #fff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+
+    /* --- Card Semplice --- */
+    .info-card {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.15);
+      width: 250px;
+      margin: 10px 0;
+    }
+    .info-card h3 {
+      margin-top: 0;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Esercizio - HTML, CSS e JS</h1>
+
+  <!-- Stato del Messaggio -->
+  <h2>Stato del Messaggio</h2>
+  <div id="message-box">Questo è un messaggio</div>
+  <button class="btn-success" onclick="setMessage('success')">Imposta come Successo</button>
+  <button class="btn-error" onclick="setMessage('error')">Imposta come Errore</button>
+
+  <!-- Avatar Personalizzabile -->
+  <h2>Avatar Personalizzabile</h2>
+  <div id="avatar" style="width:100px; height:100px; background-color:#2196f3;"></div>
+  
+  <div class="input-group">
+    <label>Larghezza: </label>
+    <input type="number" id="widthInput" value="100" onchange="updateAvatar()">
+  </div>
+  <div class="input-group">
+    <label>Altezza: </label>
+    <input type="number" id="heightInput" value="100" onchange="updateAvatar()">
+  </div>
+  <div class="input-group">
+    <label>Colore di sfondo: </label>
+    <input type="color" id="colorInput" value="#2196f3" onchange="updateAvatar()">
+  </div>
+
+  <!-- Saluto Personale -->
+  <h2>Saluto Personale</h2>
+  <div class="saluto-utente">Benvenuto nella nostra applicazione!</div>
+  <div class="saluto-utente">Benvenuto nella nostra applicazione!</div>
+
+  <!-- Card Semplice -->
+  <h2>Card Semplice</h2>
+  <div class="info-card">
+    <h3>Titolo della Card</h3>
+    <p>Contenuto della card...</p>
+  </div>
+
+  <script>
+    // --- Stato del Messaggio ---
+    function setMessage(type) {
+      const messageBox = document.getElementById('message-box');
+      messageBox.className = ''; // reset classi
+      if (type === 'success') {
+        messageBox.classList.add('success');
+        messageBox.textContent = 'Operazione completata con successo!';
+      } else if (type === 'error') {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Si è verificato un errore!';
+      }
+    }
+
+    // --- Avatar Personalizzabile ---
+    function updateAvatar() {
+      const avatar = document.getElementById('avatar');
+      const width = document.getElementById('widthInput').value;
+      const height = document.getElementById('heightInput').value;
+      const color = document.getElementById('colorInput').value;
+
+      avatar.style.width = width + 'px';
+      avatar.style.height = height + 'px';
+      avatar.style.backgroundColor = color;
+    }
+  </script>
+
+</body>
+</html>
