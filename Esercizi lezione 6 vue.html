@@ -86,7 +86,7 @@
       </product-card>
     </div>
 
-    <h2>2️lert Box (Props con classi dinamiche)</h2>
+    <h2> Alert Box (Props con classi dinamiche)</h2>
     <alert-box messaggio="Operazione completata!" tipo="success"></alert-box>
     <alert-box messaggio="Errore durante il salvataggio!" tipo="error"></alert-box>
 
@@ -94,7 +94,7 @@
     <button @click="modaleAperta = true">Apri Modale</button>
     <modal-dialog v-if="modaleAperta" @chiudi="modaleAperta = false"></modal-dialog>
 
-    <h2> Valutazione a Stelle ($emit)</h2>
+    <h2>Valutazione a Stelle ($emit)</h2>
     <star-rating @imposta-valutazione="valutazione = $event"></star-rating>
     <p>Valutazione selezionata: {{ valutazione }}</p>
   </div>
@@ -102,7 +102,7 @@
   <script>
     const { createApp } = Vue;
 
-    //  COMPONENTE product-card
+    // COMPONENTE product-card
     const ProductCard = {
       props: ['nomeProdotto', 'prezzo'],
       template: `
@@ -123,7 +123,7 @@
       `
     };
 
-    // COMPONENTE modal-dialog
+    //  COMPONENTE modal-dialog
     const ModalDialog = {
       template: `
         <div class="modal">
@@ -136,7 +136,7 @@
       `
     };
 
-    //  COMPONENTE star-rating
+    // 4️⃣ COMPONENTE star-rating
     const StarRating = {
       data() {
         return { stelleSelezionate: 0 };
@@ -155,7 +155,7 @@
             class="star"
             :class="{ active: n <= stelleSelezionate }"
             @click="impostaValutazione(n)">
-            
+            ★
           </span>
         </div>
       `
@@ -184,4 +184,3 @@
   </script>
 </body>
 </html>
-
