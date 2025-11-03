@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Componenti Vue - Props ed Eventi</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    /* --- Stile per product-card --- */
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+      display: inline-block;
+    }
+
+    /* --- Stile per alert-box --- */
+    .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      color: #fff;
+    }
+
+    .success {
+      background-color: #4CAF50;
+    }
+
+    .error {
+      background-color: #F44336;
+    }
+
+    /* --- Stile per modale --- */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* --- Stile per star-rating --- */
+    .stars {
+      display: flex;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .star {
+      font-size: 24px;
+      color: gray;
+    }
+
+    .star.active {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h2> Lista Prodotti (Props)</h2>
+    <div>
+      <product-card
+        v-for="(p, index) in prodotti"
+        :key="index"
+        :nome-prodotto="p.nome"
+        :prezzo="p.prezzo">
+      </product-card>
+    </div>
+
+    <h2>2️lert Box (Props con classi dinamiche)</h2>
+    <alert-box messaggio="Operazione completata!" tipo="success"></alert-box>
+    <alert-box messaggio="Errore durante il salvataggio!" tipo="error"></alert-box>
+
+    <h2> Modale con Evento ($emit)</h2>
+    <button @click="modaleAperta = true">Apri Modale</button>
+    <modal-dialog v-if="modaleAperta" @chiudi="modaleAperta = false"></modal-dialog>
+
+    <h2> Valutazione a Stelle ($emit)</h2>
+    <star-rating @imposta-valutazione="valutazione = $event"></star-rating>
+    <p>Valutazione selezionata: {{ valutazione }}</p>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    //  COMPONENTE product-card
+    const ProductCard = {
+      props: ['nomeProdotto', 'prezzo'],
+      template: `
+        <div class="product-card">
+          <h3>{{ nomeProdotto }}</h3>
+          <p>Prezzo: € {{ prezzo.toFixed(2) }}</p>
+        </div>
+      `
+    };
+
+    //  COMPONENTE alert-box
+    const AlertBox = {
+      props: ['messaggio', 'tipo'],
+      template: `
+        <div class="alert" :class="tipo">
+          {{ messaggio }}
+        </div>
+      `
+    };
+
+    // COMPONENTE modal-dialog
+    const ModalDialog = {
+      template: `
+        <div class="modal">
+          <div class="modal-content">
+            <h3>Modale Aperta!</h3>
+            <p>Questo è un esempio di modale con evento di chiusura.</p>
+            <button @click="$emit('chiudi')">Chiudi</button>
+          </div>
+        </div>
+      `
+    };
+
+    //  COMPONENTE star-rating
+    const StarRating = {
+      data() {
+        return { stelleSelezionate: 0 };
+      },
+      methods: {
+        impostaValutazione(n) {
+          this.stelleSelezionate = n;
+          this.$emit('imposta-valutazione', n);
+        }
+      },
+      template: `
+        <div class="stars">
+          <span
+            v-for="n in 5"
+            :key="n"
+            class="star"
+            :class="{ active: n <= stelleSelezionate }"
+            @click="impostaValutazione(n)">
+            
+          </span>
+        </div>
+      `
+    };
+
+    // ️ APP PRINCIPALE
+    createApp({
+      components: {
+        'product-card': ProductCard,
+        'alert-box': AlertBox,
+        'modal-dialog': ModalDialog,
+        'star-rating': StarRating
+      },
+      data() {
+        return {
+          prodotti: [
+            { nome: 'Laptop', prezzo: 899.99 },
+            { nome: 'Smartphone', prezzo: 499.99 },
+            { nome: 'Cuffie', prezzo: 59.99 }
+          ],
+          modaleAperta: false,
+          valutazione: 0
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
+
