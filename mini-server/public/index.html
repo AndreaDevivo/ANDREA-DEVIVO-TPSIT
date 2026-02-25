@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Lista Attività</h1>
+
+    <!-- Form per aggiungere attività -->
+    <form id="taskForm">
+        <input type="text" id="taskInput" placeholder="Scrivi una attività">
+        <button type="submit">Aggiungi</button>
+    </form>
+
+    <ul id="taskList"></ul>
+
+<script>
+    const form = document.getElementById('taskForm');
+    const input = document.getElementById('taskInput');
+    const list = document.getElementById('taskList');
+
+    // Funzione per caricare le attività dal server
+    async function loadTasks() {
+        const response = await fetch('/api/tasks');
+        const tasks = await response.json();
+
+        list.innerHTML = "";
+
+        tasks.forEach(task => {
+            const li = document.createElement('li');
+            li.textContent = task.text;
+            list.appendChild(li);
+        });
+    }
+
+    // Evento invio form
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        await fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ task: input.value })
+        });
+
+        input.value = "";
+        loadTasks();
+    });
+
+    // Carica le attività quando la pagina si apre
+    loadTasks();
+</script>
+
+</body>
+</html>
