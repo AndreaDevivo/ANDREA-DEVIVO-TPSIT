@@ -1,25 +1,113 @@
 body {
-    font-family: Arial;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     text-align: center;
-    background-color: #f0f0f0;
+    /* Grigio molto chiaro e calmo, non bianco sparato */
+    background-color: #f0f2f5; 
+    color: #2d3436;
+    margin: 0;
+    padding: 60px 20px;
 }
 
 h1 {
-    color: #333;
+    /* Un blu scuro desaturato invece del rosso */
+    color: #2c3e50; 
+    font-size: 3rem;
+    margin-bottom: 40px;
+    font-weight: 900;
 }
 
 form {
-    margin: 20px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    display: inline-flex;
+    gap: 10px;
+    /* Ombra più morbida e neutra */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.03);
+    margin-bottom: 20px;
 }
 
 input {
-    padding: 5px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0e6ed;
+    background-color: #fafbfc;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+    width: 300px;
+}
+
+input:focus {
+    /* Focus blu delicato */
+    border-color: #3498db;
 }
 
 button {
-    padding: 5px 10px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    /* Gradiente sui toni del blu/ottanio, molto più rilassante */
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Pulsante Svuota: Grigio neutro per non distrarre */
+.btn-clear {
+    background: #95a5a6;
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.8rem;
+    padding: 10px 20px;
+}
+
+.btn-clear:hover {
+    background: #7f8c8d;
+    box-shadow: none;
 }
 
 ul {
     list-style: none;
+    padding: 0;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+li {
+    background: #ffffff;
+    margin-bottom: 10px;
+    padding: 18px 25px;
+    border-radius: 15px;
+    /* Bordo laterale color salvia/azzurro invece che rosso */
+    border-left: 8px solid #3498db;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Stile per il bottone "Preso" dentro la lista */
+li button {
+    background: #f1f2f6;
+    color: #2f3542;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+}
+
+li button:hover {
+    background: #dfe4ea;
+    color: #000;
 }
