@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>Mini Task Manager</title>
+    <meta charset="UTF-8">
+    <title>Lista Spesa 🛒</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Lista Attività</h1>
+    <h1>Lista Spesa 🛒</h1>
 
-    <!-- Form per aggiungere attività -->
     <form id="taskForm">
-        <input type="text" id="taskInput" placeholder="Scrivi una attività">
+        <input type="text" id="taskInput" placeholder="Cosa devi comprare?" required>
         <button type="submit">Aggiungi</button>
     </form>
+
+    <button class="btn-clear" onclick="svuotaTutto()">🗑️ Svuota tutta la lista</button>
 
     <ul id="taskList"></ul>
 
@@ -21,39 +23,49 @@
     const input = document.getElementById('taskInput');
     const list = document.getElementById('taskList');
 
-    // Funzione per caricare le attività dal server
-    async function loadTasks() {
+    async function init() {
         const response = await fetch('/api/tasks');
         const tasks = await response.json();
-
-        list.innerHTML = "";
-
-        tasks.forEach(task => {
-            const li = document.createElement('li');
-            li.textContent = task.text;
-            list.appendChild(li);
-        });
+        list.innerHTML = ""; 
+        tasks.forEach(t => aggiungiGraficamente(t));
     }
 
-    // Evento invio form
+    function aggiungiGraficamente(task) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${task.text}</span>
+            <button onclick="this.parentElement.remove()" style="cursor:pointer; padding: 5px 10px; font-size: 0.8rem;">Preso ✅</button>
+        `;
+        list.appendChild(li);
+    }
+
+    // NUOVA FUNZIONE: Cancella tutto sia lato client che server
+    async function svuotaTutto() {
+        if (confirm("Sei sicuro di voler cancellare tutta la lista?")) {
+            const response = await fetch('/api/tasks', { method: 'DELETE' });
+            if (response.ok) {
+                list.innerHTML = "";
+            }
+        }
+    }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        await fetch('/api/tasks', {
+        const testo = input.value;
+        const response = await fetch('/api/tasks', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ task: input.value })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task: testo })
         });
 
-        input.value = "";
-        loadTasks();
+        if (response.ok) {
+            const nuovoTask = await response.json();
+            aggiungiGraficamente(nuovoTask);
+            input.value = ""; 
+        }
     });
 
-    // Carica le attività quando la pagina si apre
-    loadTasks();
+    init();
 </script>
-
 </body>
 </html>
