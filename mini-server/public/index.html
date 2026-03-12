@@ -1,71 +1,145 @@
 <!DOCTYPE html>
+<!-- Dichiara il tipo di documento HTML5 -->
+
 <html lang="it">
+<!-- Imposta la lingua della pagina in italiano -->
+
 <head>
     <meta charset="UTF-8">
+    <!-- Permette di usare caratteri speciali (accenti, emoji ecc.) -->
+
     <title>Lista Spesa 🛒</title>
+    <!-- Titolo della pagina che appare nella scheda del browser -->
+
     <link rel="stylesheet" href="style.css">
+    <!-- Collega il file CSS esterno per lo stile della pagina -->
 </head>
+
 <body>
 
     <h1>Lista Spesa 🛒</h1>
+    <!-- Titolo principale della pagina -->
 
     <form id="taskForm">
+    <!-- Form che servirà per aggiungere nuovi elementi alla lista -->
+
         <input type="text" id="taskInput" placeholder="Cosa devi comprare?" required>
+        <!-- Campo di input dove l'utente scrive cosa deve comprare -->
+        <!-- required = obbliga l'utente a scrivere qualcosa -->
+
         <button type="submit">Aggiungi</button>
+        <!-- Pulsante che invia il form -->
     </form>
 
     <button class="btn-clear" onclick="svuotaTutto()">🗑️ Svuota tutta la lista</button>
+    <!-- Pulsante che chiama la funzione svuotaTutto() per cancellare tutta la lista -->
 
     <ul id="taskList"></ul>
+    <!-- Lista HTML dove verranno inseriti gli elementi della spesa -->
 
 <script>
+
+    // Seleziona gli elementi HTML e li salva in variabili
     const form = document.getElementById('taskForm');
     const input = document.getElementById('taskInput');
     const list = document.getElementById('taskList');
 
+    // Funzione che carica le tasks dal server quando la pagina si avvia
     async function init() {
+
+        // Richiesta GET al server per ottenere la lista
         const response = await fetch('/api/tasks');
+
+        // Converte la risposta in formato JSON
         const tasks = await response.json();
+
+        // Svuota la lista HTML prima di ricostruirla
         list.innerHTML = ""; 
+
+        // Per ogni task ricevuta dal server
         tasks.forEach(t => aggiungiGraficamente(t));
+        // la aggiunge graficamente nella pagina
     }
 
+    // Funzione che crea visivamente una task nella lista
     function aggiungiGraficamente(task) {
+
+        // Crea un elemento <li>
         const li = document.createElement('li');
+
+        // Inserisce HTML dentro l'elemento
         li.innerHTML = `
             <span>${task.text}</span>
-            <button onclick="this.parentElement.remove()" style="cursor:pointer; padding: 5px 10px; font-size: 0.8rem;">Preso ✅</button>
+            <!-- Mostra il testo della task -->
+
+            <button onclick="this.parentElement.remove()" 
+            style="cursor:pointer; padding: 5px 10px; font-size: 0.8rem;">
+            Preso ✅
+            </button>
+            <!-- Pulsante che rimuove l'elemento dalla lista HTML -->
         `;
+
+        // Aggiunge l'elemento alla lista <ul>
         list.appendChild(li);
     }
 
-    // NUOVA FUNZIONE: Cancella tutto sia lato client che server
+    // FUNZIONE: Cancella tutta la lista
+    // sia dal server che dal browser
     async function svuotaTutto() {
+
+        // Chiede conferma all'utente
         if (confirm("Sei sicuro di voler cancellare tutta la lista?")) {
+
+            // Richiesta DELETE al server
             const response = await fetch('/api/tasks', { method: 'DELETE' });
+
+            // Se la richiesta è andata a buon fine
             if (response.ok) {
+
+                // Cancella anche la lista visiva nella pagina
                 list.innerHTML = "";
             }
         }
     }
 
+    // Evento che intercetta l'invio del form
     form.addEventListener('submit', async (e) => {
+
+        // Impedisce il ricaricamento della pagina
         e.preventDefault();
+
+        // Prende il testo inserito dall'utente
         const testo = input.value;
+
+        // Richiesta POST al server per salvare la nuova task
         const response = await fetch('/api/tasks', {
-            method: 'POST',
+
+            method: 'POST', // metodo HTTP
+
             headers: { 'Content-Type': 'application/json' },
+            // indica che stiamo inviando dati JSON
+
             body: JSON.stringify({ task: testo })
+            // converte il testo in JSON da inviare al server
         });
 
+        // Se il server ha salvato correttamente la task
         if (response.ok) {
+
+            // Riceve la nuova task dal server
             const nuovoTask = await response.json();
+
+            // La aggiunge graficamente alla lista
             aggiungiGraficamente(nuovoTask);
+
+            // Svuota il campo input
             input.value = ""; 
         }
     });
 
+    // Avvia la funzione init quando la pagina viene caricata
     init();
+
 </script>
 </body>
 </html>
